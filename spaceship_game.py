@@ -111,6 +111,7 @@ sm_laser_icon = pygame.transform.scale(pygame.image.load("images/sm_laser_icon_0
 gum_blaster_icon = pygame.transform.scale(pygame.image.load("images/gum_blaster_icon_0.png").convert_alpha(), (256, 256))
 lava_blaster_icon = pygame.transform.scale(pygame.image.load("images/lava_blaster_icon_0.png").convert_alpha(), (256, 256))
 beam_laser_icon = pygame.transform.scale(pygame.image.load("images/beam_laser_icon_0.png").convert_alpha(), (256, 256))
+ice_ray_icon = pygame.transform.scale(pygame.image.load("images/ice_ray_icon_0.png").convert_alpha(), (256, 256))
 
 #enemy
 enemy_laser_bolt_img = pygame.transform.scale(pygame.image.load("images/enemy_laser_bolt.png").convert_alpha(), (32, 32))
@@ -625,7 +626,7 @@ def create_weapon_list():
         Weapon('GUM BLASTER', gumball_img, gum_blaster_icon, gumball_reload_time_scheme, gumball_projectile_speed_scheme, ConstX(), gumball_damage_scheme, gumball_upgrade_costs, create_gum_splat, 300),
         Weapon('LAVA BLASTER', lava_ball_img, lava_blaster_icon, lava_ball_reload_time_scheme, lava_ball_projectile_speed_scheme, ConstX(), lava_ball_damage_scheme, lava_ball_upgrade_costs, create_lava_splat, 300),
         Weapon('BEAM LASER', beam_laser_img, beam_laser_icon, beam_laser_reload_time_scheme, beam_laser_projectile_speed_scheme, TrackParent(), beam_laser_damage_scheme, beam_laser_upgrade_costs, None, None),
-        Weapon('ICE RAY', ice_ray_img, None, ice_ray_reload_time_scheme, ice_ray_projectile_speed_scheme, TrackParent(), ice_ray_damage_scheme, ice_ray_upgrade_costs, None, 1),
+        Weapon('ICE RAY', ice_ray_img, ice_ray_icon, ice_ray_reload_time_scheme, ice_ray_projectile_speed_scheme, TrackParent(), ice_ray_damage_scheme, ice_ray_upgrade_costs, None, 1),
         Weapon('MINE LAUNCHER', mine_img, None, mine_launcher_reload_time_scheme, mine_launcher_speed_scheme, ConstX(), mine_launcher_damage_scheme, mine_launcher_upgrade_costs, None, None),
     ])
 
