@@ -106,6 +106,7 @@ lava_ball_img = pygame.transform.scale(pygame.image.load("images/lava_ball.png")
 beam_laser_img = pygame.image.load("images/beam_laser_proj.png").convert_alpha()
 ice_ray_img = pygame.image.load("images/ice_ray_proj.png").convert_alpha()
 mine_img = pygame.image.load("images/mine.png").convert_alpha()
+rocket_img = pygame.transform.scale(pygame.image.load("images/rocket.png").convert_alpha(), (64, 64))
 
 sm_laser_icon = pygame.transform.scale(pygame.image.load("images/sm_laser_icon_0.png").convert_alpha(), (256, 256))
 gum_blaster_icon = pygame.transform.scale(pygame.image.load("images/gum_blaster_icon_0.png").convert_alpha(), (256, 256))
@@ -294,7 +295,7 @@ class Player(pygame.sprite.Sprite):
 
 class MovePattern:
     def __init__(self):
-        pass
+        self.directed = False
 
     def init_state(self, obj):
         pass
@@ -329,6 +330,25 @@ class TrackParent(MovePattern):
         delta_y = obj.parent.rect.y - obj.last_y_pos
         obj.last_y_pos = obj.parent.rect.y
         return np.array([obj.speed, delta_y])
+    
+class GuidedMissile(MovePattern):
+    def __init__(self):
+        super().__init__()
+        self.directed = True
+
+    def __call__(self, obj):
+        if enemies:
+            vectors = np.empty((len(enemies), 2))
+            for i, enemy in enumerate(enemies):
+                vectors[i] = np.array(enemy.rect.center) - np.array(obj.rect.center)
+            norms = np.linalg.norm(vectors, axis=1)
+            min_index = np.argmin(norms)
+            target_vector = vectors[min_index]
+            target_norm = np.linalg.norm(target_vector) + 0.00001 # to avoid div by 0
+            normed_target = target_vector / target_norm
+            return normed_target * obj.speed
+        else:
+            return np.array([obj.speed, 0])
     
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
@@ -430,6 +450,13 @@ class Projectile(pygame.sprite.Sprite):
         self.velocity = self.move_pattern(self)
         self.rect.move_ip(self.velocity[0], self.velocity[1])
 
+        # image rotation
+        if self.move_pattern.directed:
+            x, y = self.velocity
+            angle = np.arctan2(-y, x) * 180 / np.pi
+            self.rotated_image = pygame.transform.rotate(self.image, angle)
+            self.rect = self.rotated_image.get_rect(center=self.rect.center)
+
         # collision with enemy
         if self.parent in players["all"]:
             for enemy in enemies:        
@@ -454,6 +481,12 @@ class Projectile(pygame.sprite.Sprite):
         # kill once off screen
         if not boundary.colliderect(self.rect):
             self.kill()
+
+    def draw(self, surface):
+        if self.move_pattern.directed:
+            surface.blit(self.rotated_image, self.rect)
+        else:
+            surface.blit(self.image, self.rect)
 
 class Component:
     def __init__(self, upgrade_costs, icon):
@@ -619,6 +652,11 @@ mine_launcher_reload_time_scheme = [300 - i*10 for i in range(13)]
 mine_launcher_speed_scheme = [0]*13
 mine_launcher_damage_scheme = [50 + i*5 for i in range(1, 14)]
 
+rocket_launcher_upgrade_costs = [1000 + i*500 for i in range(13)]
+rocket_launcher_reload_time_scheme = [200 - i*10 for i in range(13)]
+rocket_launcher_speed_scheme = [15]*13
+rocket_launcher_damage_scheme = [25 + i*5 for i in range(1, 14)]
+
 def create_weapon_list():
     """Creates a fresh set of weapons for a player"""
     return np.array([
@@ -628,6 +666,7 @@ def create_weapon_list():
         Weapon('BEAM LASER', beam_laser_img, beam_laser_icon, beam_laser_reload_time_scheme, beam_laser_projectile_speed_scheme, TrackParent(), beam_laser_damage_scheme, beam_laser_upgrade_costs, None, None),
         Weapon('ICE RAY', ice_ray_img, ice_ray_icon, ice_ray_reload_time_scheme, ice_ray_projectile_speed_scheme, TrackParent(), ice_ray_damage_scheme, ice_ray_upgrade_costs, None, 1),
         Weapon('MINE LAUNCHER', mine_img, None, mine_launcher_reload_time_scheme, mine_launcher_speed_scheme, ConstX(), mine_launcher_damage_scheme, mine_launcher_upgrade_costs, None, None),
+        Weapon('ROCKETS', rocket_img, None, rocket_launcher_reload_time_scheme, rocket_launcher_speed_scheme, GuidedMissile(), rocket_launcher_damage_scheme, rocket_launcher_upgrade_costs, None, None)
     ])
 
 #enemy
@@ -638,8 +677,8 @@ enemy_laser_template = Weapon('BOLT LASTER', enemy_laser_bolt_img, sm_laser_icon
 # player_1.glam_image = noeys_ship_glam_img
 player_2 = Player(players, 'player_2', gabes_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 player_2.glam_image = gabes_ship_glam_img
-# player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-# player_3.glam_image = anikas_ship_glam_img
+player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+player_3.glam_image = anikas_ship_glam_img
 # player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 # player_4.glam_image = aletheas_ship_glam_img
 # player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
@@ -1355,7 +1394,8 @@ class GamePlay(State):
         surface.blit(stars_mid_img, (-(self.star_motion_timer % (GAME_WIDTH*2))/2, 0))
         surface.blit(stars_near_img, (-(self.star_motion_timer % GAME_WIDTH), 0))
 
-        projectiles.draw(surface) 
+        for projectile in projectiles:
+            projectile.draw(surface) 
 
         for player in players['active']:
             player.draw(surface)
