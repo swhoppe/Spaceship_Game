@@ -95,6 +95,7 @@ armor_icon_0 = pygame.transform.scale(pygame.image.load("images/armor_icon_0.png
 # enemy images
 saucer_1_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (128, 128))
 saucer_1_big_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (256, 256))
+saucer_1_mini_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (128, 128))
 saucer_2_img = pygame.transform.scale(pygame.image.load("images/saucer_2.png").convert_alpha(), (128, 128))
 saucer_2_boss_img = pygame.transform.scale(pygame.image.load("images/saucer_2.png").convert_alpha(), (512, 512))
 
@@ -352,6 +353,7 @@ class GuidedMissile(MovePattern):
     
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
+crazy_sine = SinePattern(8, 3)
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, group, name, image, start_hp, start_position, speed, move_pattern, weapon):
@@ -367,13 +369,11 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = - speed
         self.velocity = np.array([self.speed, 0])
         self.freeze_timer = 0
-        self.crash_damage = 30
         self.kill_bonus = start_hp / 4
         self.hp = start_hp
         self.hp_bar = Health(self.rect.left, self.rect.bottom - 10, 64, 5, self.hp)
+        self.crash_damage = start_hp * 0.5
         self.weapon = weapon
-        self.shoot_timer = 0
-        self.shoot_delay = 120
         self.tof = 0 # time of flight
 
     def freeze(self, time):
@@ -410,14 +410,15 @@ class Enemy(pygame.sprite.Sprite):
         self.hp_bar.rect.clamp_ip(boundary)
         self.hp_bar.rect.x = self.rect.centerx - self.hp_bar.rect.width/2
 
-        self.shoot_timer += 1
-        if self.shoot_timer >= self.shoot_delay:
-            self.shoot_timer = 0
-            if self.weapon != None:
+        if self.weapon:
+            if self.weapon.reload_timer < self.weapon.reload_time:
+                self.weapon.reload_timer += 1
+            else:
                 self.shoot()
     
     def shoot(self):
         self.weapon.shoot(self.rect.center, self)
+        self.weapon.reload_timer = 0
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -595,6 +596,10 @@ class Weapon(Component):
         new_projectile.freeze = self.freeze
         projectiles.add(new_projectile)
 
+    def set_level(self, level):
+        self.upgrade_level = level
+        self.update()
+
 class EffectSprite(pygame.sprite.Sprite):
     def __init__(self, image, start_location, duration):
         super().__init__()
@@ -626,6 +631,7 @@ sm_laser_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500
 sm_laser_reload_time_scheme = [int(30 - x * 2.4) for x in range(13)]
 sm_laser_projectile_speed_scheme = [15, 15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18]
 sm_laser_damage_scheme = [10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15]
+sm_laser_enemy_reload_time_scheme = [150 - i*10 for i in range(13)]
 
 gumball_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
 gumball_reload_time_scheme = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40]
@@ -671,17 +677,19 @@ def create_weapon_list():
 
 #enemy
 enemy_laser_template = Weapon('BOLT LASTER', enemy_laser_bolt_img, sm_laser_icon, sm_laser_reload_time_scheme, [-x for x in sm_laser_projectile_speed_scheme], ConstX(), sm_laser_damage_scheme, sm_laser_upgrade_costs, None, None)
+enemy_fast_laser_template = Weapon('BOLT LASTER', enemy_laser_bolt_img, sm_laser_icon, sm_laser_enemy_reload_time_scheme, [-x for x in sm_laser_projectile_speed_scheme], ConstX(), sm_laser_damage_scheme, sm_laser_upgrade_costs, None, None)
+enemy_fast_laser_template.set_level(10)
 
 # instance players
-player_1 = Player(players, 'player_1', noeys_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-player_1.glam_image = noeys_ship_glam_img
+# player_1 = Player(players, 'player_1', noeys_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+# player_1.glam_image = noeys_ship_glam_img
 player_2 = Player(players, 'player_2', gabes_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 player_2.glam_image = gabes_ship_glam_img
-player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-player_3.glam_image = anikas_ship_glam_img
+# player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+# player_3.glam_image = anikas_ship_glam_img
 # player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 # player_4.glam_image = aletheas_ship_glam_img
-player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+# player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 
 # assign controllers
 for i, player in enumerate(players['all']):
@@ -721,14 +729,16 @@ class CommandGroup:
             command.execute()
 
 basic_saucer = EnemyGenerator(saucer_1_img, 100 * len(players['all'])/2, None)
+mini_saucer = EnemyGenerator(saucer_1_mini_img, 100 * len(players['all'])/2, None)
 big_saucer = EnemyGenerator(saucer_1_big_img, 2000 * len(players['all'])/2, None)
 shooting_saucer = EnemyGenerator(saucer_2_img, 100 * len(players['all'])/2, copy.copy(enemy_laser_template))
+fast_shooting_saucer = EnemyGenerator(saucer_2_img, 100 * len(players['all'])/2, copy.copy(enemy_fast_laser_template))
 boss_1 = EnemyGenerator(saucer_2_boss_img, 10000 * len(players['all'])/2, copy.copy(enemy_laser_template))
 
 tenth = GAME_HEIGHT/10
 
 level_1_seq = {
-    0: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, ConstX()),
+    0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, ConstX()),
     120: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
     240: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 2), 3, sine_pattern),
     360: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
