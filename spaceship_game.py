@@ -685,8 +685,8 @@ enemy_fast_laser_template.set_level(10)
 # player_1.glam_image = noeys_ship_glam_img
 player_2 = Player(players, 'player_2', gabes_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 player_2.glam_image = gabes_ship_glam_img
-# player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-# player_3.glam_image = anikas_ship_glam_img
+player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+player_3.glam_image = anikas_ship_glam_img
 # player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 # player_4.glam_image = aletheas_ship_glam_img
 # player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
@@ -738,26 +738,53 @@ boss_1 = EnemyGenerator(saucer_2_boss_img, 10000 * len(players['all'])/2, copy.c
 tenth = GAME_HEIGHT/10
 
 level_1_seq = {
+    # Original solo spawns, but minis start appearing to harass
     0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, ConstX()),
+    60: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 5, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 5, gentle_sine)),
     120: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
-    240: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 2), 3, sine_pattern),
+    240: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 5, crazy_sine)),
     360: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
-    480: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 3 * GAME_HEIGHT / 2), 3, sine_pattern),
+    480: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 5, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 5, gentle_sine)),
     600: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
-    720: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
-    840: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 4 * GAME_HEIGHT / 2), 3, sine_pattern),
-    960: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 4 * GAME_HEIGHT / 2), 3, sine_pattern),
+    720: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*4), 6, crazy_sine)),
+    840: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+    960: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 5, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 5, crazy_sine)),
     1080: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
-    1200: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
+    1200: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*3), 6, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*7), 6, gentle_sine)),
     1320: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
-    1440: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    1560: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth *5), 3, sine_pattern),
-    1680: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    1800: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    1920: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    2040: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    2160: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
-    2280: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth * 5), 3, sine_pattern),
+    1440: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 6, crazy_sine)),
+    1560: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+    1680: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 6, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 6, crazy_sine)),
+    1800: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+    1920: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*3), 2, gentle_sine)),
+    2040: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+    2160: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*2), 6, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*8), 6, crazy_sine)),
+    2280: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 3, sine_pattern),
     2700: None
 }
 
@@ -765,34 +792,41 @@ level_2_seq = {
     0: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 3), 2, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 3), 2.5, ConstX())
-    ),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 3), 2.5, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 6, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 6, crazy_sine)),
     300: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 2.5, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 3), 5, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 3), 3, ConstX())
-    ),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 3), 3, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*4), 6, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*6), 6, gentle_sine)),
     600: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 2, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 4), 3, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 2 * GAME_HEIGHT / 3), 2.5, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 3 * GAME_HEIGHT / 4), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 4 * GAME_HEIGHT / 5), 2, gentle_sine)
-    ),
-    900:CommandGroup(
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 4 * GAME_HEIGHT / 5), 2, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*2), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*5), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*8), 7, crazy_sine)),
+    900: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, GAME_HEIGHT / 2), 2, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 4), 3, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, 2 * GAME_HEIGHT / 3), 2.5, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, 3 * GAME_HEIGHT / 4), 2, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, 4 * GAME_HEIGHT / 5), 1, sine_pattern)
-    ),
-    1200:CommandGroup(
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, 4 * GAME_HEIGHT / 5), 1, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*3), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*7), 7, crazy_sine)),
+    1200: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, rng.uniform(1, 10, 1)[0]*tenth), 1, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, rng.uniform(1, 10, 1)[0]*tenth), 2, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, rng.uniform(1, 10, 1)[0]*tenth), 1.5, gentle_sine),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, rng.uniform(1, 10, 1)[0]*tenth), 2.5, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, rng.uniform(1, 10, 1)[0]*tenth), 1, gentle_sine)
-    ),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, rng.uniform(1, 10, 1)[0]*tenth), 1, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 7, crazy_sine)),
     1500: None
 }
 
@@ -801,7 +835,10 @@ level_3_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*2), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*4), 3, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*6), 3, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*8), 3, gentle_sine)),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*8), 3, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*1), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*5), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*9), 7, crazy_sine)),
     120: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 1.7, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, GAME_HEIGHT/2 - 64), 1.7, ConstX()),
@@ -809,7 +846,14 @@ level_3_seq = {
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 - 128), 1.7, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 + 128), 1.7, gentle_sine),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 - 172), 1.7, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 1.7, gentle_sine)),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 1.7, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine)),
+    500: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 8, crazy_sine)),
     720: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, GAME_HEIGHT/2 - 64), 3, gentle_sine),
@@ -817,7 +861,15 @@ level_3_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 - 128), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 + 128), 3, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 - 172), 3, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 3, ConstX())),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 3, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2, gentle_sine)),
+    1100: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine)),
     1440: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 3, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, GAME_HEIGHT/2 - 64), 3, ConstX()),
@@ -825,7 +877,9 @@ level_3_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 - 128), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 + 128), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 - 172), 3, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 3, gentle_sine)),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 3, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*2), 2.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*8), 2.5, sine_pattern)),
     2040: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 2.2, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, GAME_HEIGHT/2 - 64), 2.2, gentle_sine),
@@ -833,7 +887,11 @@ level_3_seq = {
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 - 128), 2.2, gentle_sine),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 + 128), 2.2, gentle_sine),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 - 172), 2.2, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 2.2, ConstX())),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 2.2, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*1), 2, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 2, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*3), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*7), 8, crazy_sine)),
     3240: None
 }
 
@@ -843,13 +901,9 @@ level_4_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 3, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*7), 3, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 3, ConstX())),
-    600: CommandGroup(
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 3, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 3, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 3, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*3), 3, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth), 3, ConstX())),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 3, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*2), 7, crazy_sine)),
     480: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 2.2, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, GAME_HEIGHT/2 - 64), 2.2, sine_pattern),
@@ -857,19 +911,44 @@ level_4_seq = {
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 - 128), 2.2, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, GAME_HEIGHT/2 + 128), 2.2, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 - 172), 2.2, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 2.2, sine_pattern)),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, GAME_HEIGHT/2 + 172), 2.2, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*1), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 2.5, gentle_sine)),
+    600: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 3, gentle_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 3, sine_pattern),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 3, sine_pattern),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*3), 3, sine_pattern),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth), 3, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 7, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 7, crazy_sine)),
+    1000: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 2, sine_pattern)),
     1600: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 3, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 3, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*7), 3, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 3, gentle_sine)),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 3, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*4), 2, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*6), 2, crazy_sine)),
     2080: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 3, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 3, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 3, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*3), 3, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth), 3, ConstX())),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth), 3, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 8, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 2.5, gentle_sine)),
     3000: None
 }
 
@@ -877,8 +956,10 @@ level_5_seq = {
     120: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 1, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 1, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 8, crazy_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 1, ConstX()),
@@ -887,7 +968,7 @@ level_5_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*3), 1, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 1, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*5), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*7), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*9), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth), 1, ConstX()),
@@ -900,15 +981,27 @@ level_5_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*5), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*7), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 1, ConstX())),
+    800: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 2, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 2, gentle_sine)),
     2000: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 1, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 8, crazy_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 1, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*5), 1, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth), 1, gentle_sine),
@@ -918,14 +1011,14 @@ level_5_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*9), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*3), 1, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, tenth*5), 1, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 512, tenth*5), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*7), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*9), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*3), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*5), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*7), 1, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 640, tenth*9), 1, ConstX())),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 640, tenth*9), 1, crazy_sine)),
     3000: None
 }
 
@@ -934,54 +1027,85 @@ level_6_seq = {
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*2), 1, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 1, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*6), 1, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1, ConstX())),
-    300: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, ConstX()),
-    450: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*7), 10, gentle_sine),
-    600: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 6, gentle_sine),
-    750: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 10, sine_pattern),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine)),
+    300: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 2, gentle_sine)),
+    450: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 10, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 8, crazy_sine)),
+    600: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 6, gentle_sine),
+    750: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 10, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 2.5, sine_pattern)),
     760: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*2), 1, ConstX()),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 1, gentle_sine),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*6), 1, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1, sine_pattern)),
-    900: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*5), 6, gentle_sine),
-    1020: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*9), 6, sine_pattern),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*3), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 384, tenth*7), 8, crazy_sine)),
+    900: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 6, gentle_sine),
+    1020: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 6, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 2, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 2, crazy_sine)),
     1500: CommandGroup(
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*2), 1.5, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 1.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 1.5, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*6), 1.5, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1.5, ConstX())),
-    1800: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, gentle_sine),
-    1950: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*7), 10, gentle_sine),
-    2100: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, gentle_sine),
-    2250: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 10, sine_pattern),
-    2400: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, gentle_sine),
-    2700: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 1.5, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 8, crazy_sine)),
+    1800: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, gentle_sine),
+    1950: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 10, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2, sine_pattern)),
+    2100: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, gentle_sine),
+    2250: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 10, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 8, crazy_sine)),
+    2400: SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, gentle_sine),
+    2700: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 2, crazy_sine)),
     3000: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 1, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*7), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 1, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 8, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 8, crazy_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 1, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*5), 1, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*3), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*5), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*7), 1, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, tenth*9), 1, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*9), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth), 1, sine_pattern),
         SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, tenth*3), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*5), 1, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*7), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*9), 1, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 640, tenth), 1, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 640, tenth), 1, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*3), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*5), 1, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 640, tenth*7), 1, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 640, tenth*7), 1, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 640, tenth*9), 1, gentle_sine)),
     3800: SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*5), 1, ConstX()),
     4000: None
@@ -992,54 +1116,108 @@ level_7_seq = {
         SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*2), 1, gentle_sine),
         SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*4), 1, gentle_sine),
         SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*6), 1, ConstX()),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 1, gentle_sine)),
-    300: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, gentle_sine),
-    450: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*7), 10, sine_pattern),
-    600: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 6, gentle_sine),
-    750: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 10, sine_pattern),
+        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 1, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    300: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 2, sine_pattern)),
+    450: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 10, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 9, crazy_sine)),
+    600: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 6, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 2.5, gentle_sine)),
+    750: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 10, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 9, crazy_sine)),
     950: CommandGroup(
         SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*2), 1, ConstX()),
         SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*4), 1, sine_pattern),
         SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*6), 1, sine_pattern),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 1, ConstX())),
-    1200: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*3), 6, sine_pattern),
-    1300: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth*7), 10, ConstX()),
-    1500: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 6, gentle_sine),
-    1550: SpawnCommand(basic_saucer, (GAME_WIDTH+ 128, tenth), 10, gentle_sine),
+        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 1, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*3), 2, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*7), 2, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine)),
+    1200: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, sine_pattern),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    1300: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 10, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2.5, sine_pattern)),
+    1500: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 6, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 9, crazy_sine)),
+    1550: CommandGroup(
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth), 10, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 2.5, crazy_sine)),
+    1900: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 9, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 2, crazy_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 2, crazy_sine)),
+    2500: None
 }
 
 level_8_seq = {
-    # Opening: two fast columns closing from top and bottom
+    # Opening squeeze columns + mini harassers right away
     60: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*1), 5, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*1), 5, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*1), 5, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 5, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9), 5, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*9), 5, ConstX())),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*9), 5, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 256, tenth*5), 9, crazy_sine)),
     400: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*2), 5, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*2), 5, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*2), 5, gentle_sine),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*8), 5, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*8), 5, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*8), 5, gentle_sine)),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*8), 5, gentle_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 9, crazy_sine)),
     800: CommandGroup(
-        SpawnCommand(basic_saucer,    (GAME_WIDTH + 128, tenth*3), 5, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*3), 4, ConstX()),
-        SpawnCommand(basic_saucer,    (GAME_WIDTH + 384, tenth*3), 5, gentle_sine),
-        SpawnCommand(basic_saucer,    (GAME_WIDTH + 128, tenth*7), 5, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*7), 4, ConstX()),
-        SpawnCommand(basic_saucer,    (GAME_WIDTH + 384, tenth*7), 5, gentle_sine)),
-    # Columns now meet near center -- shooting saucers hold the middle
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 128, tenth*3), 5, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*3), 4, ConstX()),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 384, tenth*3), 5, gentle_sine),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 128, tenth*7), 5, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*7), 4, ConstX()),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 384, tenth*7), 5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 512, tenth*3), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 512, tenth*7), 3, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    # Columns meet -- fast shooters and minis clog the middle
     1200: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*4), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*6), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, tenth*4), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 512, tenth*5), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 384, tenth*6), 3, gentle_sine)),
-    # Second squeeze -- faster, tighter
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*4), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*6), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*4), 3, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 512, tenth*5), 3, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*6), 3, gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*8), 9, crazy_sine)),
+    # Second squeeze -- faster, tighter, with mini swarm
     1800: CommandGroup(
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*1), 7, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*2), 7, sine_pattern),
@@ -1048,107 +1226,169 @@ level_8_seq = {
         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 7, ConstX()),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*8), 7, sine_pattern),
         SpawnCommand(basic_saucer, (GAME_WIDTH + 384, tenth*9), 7, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*8), 7, ConstX())),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 512, tenth*8), 7, ConstX()),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*7), 9, crazy_sine)),
     2200: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*3), 4, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 4, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*7), 4, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*6), 4, gentle_sine)),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*3), 4, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 3, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*7), 4, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 3, gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
     2600: CommandGroup(
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*2), 2, gentle_sine),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*5), 2, ConstX()),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*8), 2, gentle_sine)),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2, gentle_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*5), 2, ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*8), 2, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 3, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9, crazy_sine)),
     3200: None
 }
 
 level_9_seq = {
-    # Protective screen of big saucers enters first
+    # Opening screen with mini chaos running interference
     60: CommandGroup(
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*2), 1.5, gentle_sine),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*4), 1.5, ConstX()),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*6), 1.5, gentle_sine),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 1.5, ConstX())),
-    # Boss enters behind the screen
+        SpawnCommand(big_saucer,  (GAME_WIDTH + 128, tenth*2), 1.5, gentle_sine),
+        SpawnCommand(big_saucer,  (GAME_WIDTH + 256, tenth*4), 1.5, ConstX()),
+        SpawnCommand(big_saucer,  (GAME_WIDTH + 128, tenth*6), 1.5, gentle_sine),
+        SpawnCommand(big_saucer,  (GAME_WIDTH + 256, tenth*8), 1.5, ConstX()),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    # Boss enters
     300: SpawnCommand(boss_1, (GAME_WIDTH + 512, tenth*5), 1, ConstX()),
-    # Harassment saucers come from close behind to stop players camping
+    # Harassment wave -- fast shooters added to make camping impossible
     500: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*1), 2, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*3), 2, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*7), 2, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*9), 2, sine_pattern)),
-    # Reinforce the screen as it gets chipped away
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*1), 2, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2.5, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*3), 2, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*7), 2, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2.5, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*9), 2, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9, crazy_sine)),
+    # Reinforce the screen
     1000: CommandGroup(
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*3), 1.5, sine_pattern),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*5), 1.5, ConstX()),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*7), 1.5, sine_pattern)),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*3), 1.5, sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*5), 1.5, ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*7), 1.5, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
     1500: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*2), 2.5, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*6), 2.5, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2.5, sine_pattern)),
-    # Final screen reinforcement
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*2), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2.5, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*6), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2.5, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*7), 9, crazy_sine)),
+    # Final screen reinforcement -- all enemy types at once
     2000: CommandGroup(
-        SpawnCommand(big_saucer,      (GAME_WIDTH + 128, tenth*2), 2, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 2, gentle_sine),
-        SpawnCommand(big_saucer,      (GAME_WIDTH + 128, tenth*6), 2, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2, gentle_sine)),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 2.5, sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*6), 2, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 2.5, sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 384, tenth*4), 2, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 384, tenth*6), 2, gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*8), 9, crazy_sine)),
+    2600: CommandGroup(
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*6), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*7), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*8), 9, crazy_sine),
+        SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
     3000: None
 }
 
 level_10_seq = {
-    # Wave 1: dense basic wall
+    # Wave 1: dense basic wall with minis hidden inside
     60: CommandGroup(
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*1),  4, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*2),  4, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3),  4, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*4),  4, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5),  4, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*6),  4, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7),  4, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*8),  4, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9),  4, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*1),  4, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3),  4, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*5),  4, sine_pattern),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7),  4, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9),  4, gentle_sine)),
-    # Wave 2: shooting saucers flood in while players are still fighting wave 1 stragglers
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*1), 4, sine_pattern),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*2), 9, crazy_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 4, gentle_sine),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 4, ConstX()),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*6), 9, crazy_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 4, ConstX()),
+        SpawnCommand(mini_saucer,  (GAME_WIDTH + 128, tenth*8), 9, crazy_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*9), 4, sine_pattern),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*1), 4, gentle_sine),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*3), 4, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, sine_pattern),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*7), 4, ConstX()),
+        SpawnCommand(basic_saucer, (GAME_WIDTH + 256, tenth*9), 4, gentle_sine)),
+    # Wave 2: shooting flood + fast shooters mixed in + minis
     800: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*1), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*2), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*3), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*4), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*5), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*6), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*7), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*9), 3, ConstX())),
-    # Wave 2b: big saucers join the shooting saucers
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*1), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 3, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*3), 3, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 3, sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*5), 3, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 3, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*7), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 3, gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*9), 3, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9, crazy_sine)),
+    # Wave 2b: big saucers + fast shooters + mini swarm
     1200: CommandGroup(
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*2), 2, sine_pattern),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*4), 2, ConstX()),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 128, tenth*6), 2, gentle_sine),
-        SpawnCommand(big_saucer, (GAME_WIDTH + 256, tenth*8), 2, ConstX())),
-    # Breather -- a moment of calm before wave 3
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 3, crazy_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*4), 2, ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*6), 2, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 3, crazy_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*8), 2, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    # "Breather" -- still has fast shooters and minis, just fewer big threats
     1900: CommandGroup(
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 6, ConstX()),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*5), 6, gentle_sine),
-        SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*7), 6, ConstX())),
-    # Wave 3: two bosses side by side with a shooting escort
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 128, tenth*3), 6, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, sine_pattern),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 128, tenth*7), 6, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    # Wave 3: two bosses with fast escort and full mini screen
     2400: CommandGroup(
-        SpawnCommand(boss_1,          (GAME_WIDTH + 512, tenth*3), 1.5, gentle_sine),
-        SpawnCommand(boss_1,          (GAME_WIDTH + 512, tenth*7), 1.5, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2,   ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*5), 2,   sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2,   ConstX())),
-    # Last-ditch harassment while bosses are still alive
+        SpawnCommand(boss_1,               (GAME_WIDTH + 512, tenth*3), 1.5, gentle_sine),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 512, tenth*7), 1.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 2.5, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*5), 2,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 2.5, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9, crazy_sine)),
+    # Final harassment -- everything at once while bosses are alive
     3000: CommandGroup(
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*1), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*4), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, tenth*7), 3, sine_pattern),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*2), 3, ConstX()),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, gentle_sine),
-        SpawnCommand(shooting_saucer, (GAME_WIDTH + 256, tenth*8), 3, ConstX())),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*4), 3, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*7), 3, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 3, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 3, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9, crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9, crazy_sine)),
     4200: None
 }
 
