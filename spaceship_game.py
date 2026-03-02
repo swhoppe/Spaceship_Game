@@ -4,8 +4,8 @@ import numpy as np
 from functools import partial
 
 #region globals
-GAME_WIDTH = 1280*1.5
-GAME_HEIGHT = 720*1.5
+GAME_WIDTH = 1280#*1.5
+GAME_HEIGHT = 720#*1.5
 SCALE_FACTOR = 1
 
 MOVE_DEADZONE = 0.05
@@ -95,7 +95,7 @@ armor_icon_0 = pygame.transform.scale(pygame.image.load("images/armor_icon_0.png
 # enemy images
 saucer_1_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (128, 128))
 saucer_1_big_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (256, 256))
-saucer_1_mini_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (128, 128))
+saucer_1_mini_img = pygame.transform.scale(pygame.image.load("images/saucer_1.png").convert_alpha(), (64, 64))
 saucer_2_img = pygame.transform.scale(pygame.image.load("images/saucer_2.png").convert_alpha(), (128, 128))
 saucer_2_boss_img = pygame.transform.scale(pygame.image.load("images/saucer_2.png").convert_alpha(), (512, 512))
 
@@ -561,7 +561,7 @@ class Armor(Component):
         self.parent.hp_bar.max_level = self.max_hp
 
 armor_upgrade_scheme = [200, 300, 400, 500, 700, 900, 1200, 1500, 1900, 2300, 2800, 3500]
-armor_upgrade_costs = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000]
+armor_upgrade_costs = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
 
 player_armor = Armor(armor_upgrade_scheme, armor_upgrade_costs, armor_icon_0)
     
@@ -658,7 +658,7 @@ mine_launcher_reload_time_scheme = [300 - i*10 for i in range(13)]
 mine_launcher_speed_scheme = [0]*13
 mine_launcher_damage_scheme = [50 + i*5 for i in range(1, 14)]
 
-rocket_launcher_upgrade_costs = [1000 + i*500 for i in range(13)]
+rocket_launcher_upgrade_costs = [1000 + i*500 for i in range(12)]
 rocket_launcher_reload_time_scheme = [200 - i*10 for i in range(13)]
 rocket_launcher_speed_scheme = [15]*13
 rocket_launcher_damage_scheme = [25 + i*5 for i in range(1, 14)]
@@ -685,8 +685,8 @@ enemy_fast_laser_template.set_level(10)
 # player_1.glam_image = noeys_ship_glam_img
 player_2 = Player(players, 'player_2', gabes_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 player_2.glam_image = gabes_ship_glam_img
-player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-player_3.glam_image = anikas_ship_glam_img
+# player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+# player_3.glam_image = anikas_ship_glam_img
 # player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 # player_4.glam_image = aletheas_ship_glam_img
 # player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
