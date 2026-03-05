@@ -113,26 +113,6 @@ class Weapon(Component):
         self.upgrade_level = level
         self.update()
 
-class EffectSprite(pygame.sprite.Sprite):
-    def __init__(self, image, start_location, duration):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = start_location
-        self.start_location = start_location
-        self.duration = duration
-        effects.add(self)
-    
-    def update(self):
-        self.duration -= 1
-        if self.duration <= 0: self.kill()
-
-def create_gum_splat(location, duration):
-    return EffectSprite(gum_splat_img, location, duration)
-
-def create_lava_splat(location, duration):
-    return EffectSprite(lava_splat_img, location, duration)
-
 # weapons
 
 # weapon upgrade schemes

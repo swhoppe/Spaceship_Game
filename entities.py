@@ -17,6 +17,8 @@ class Health(StatusBar):
         super().__init__(x, y, w, h, max_hp)
 
     def update(self):
+        if self.max_level == 0:
+            return
         ratio = self.level / self.max_level
         self.image.fill((0, 0, 0, 0))
         pygame.draw.rect(self.image, "red", (0, 0, self.rect.width, self.rect.height))
