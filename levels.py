@@ -705,6 +705,335 @@ level_10_seq = {
     4200: None
 }
 
+# ── LEVEL 11 ──────────────────────────────────────────────────────────────────
+# Theme: Three-front pressure. Big saucers anchor lanes while fast shooters and
+# minis deny safe corridors. First level with three simultaneous bosses.
+level_11_seq = {
+    # Opening: staggered big saucers across all three vertical lanes
+    60: CommandGroup(
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2,   gentle_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*5), 2,   ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*8), 2,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Fast shooters flood the gap left by bigs
+    500: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 3.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 3.5, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 3.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 3.5, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 3.5, sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine)),
+    # Dense shooting wall
+    1000: CommandGroup(
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*1), 3,   sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*2), 3,   gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*3), 3,   ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*4), 3,   sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*5), 3,   gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*6), 3,   ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*7), 3,   sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*8), 3,   gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*9), 3,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Breather - but minis keep coming
+    1600: CommandGroup(
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*3), 2.5, sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*7), 2.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Three bosses enter together
+    2200: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*2), 1.5, gentle_sine),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*5), 1.5, ConstX()),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*8), 1.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*1), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 3,   sine_pattern)),
+    # Harassment while bosses are alive
+    2800: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*2), 3,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*8), 3,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Final push - full mini screen + shooters while bosses remain
+    3600: CommandGroup(
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*2), 3.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 3.5, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*6), 3.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 3.5, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    4800: None
+}
+
+# ── LEVEL 12 ──────────────────────────────────────────────────────────────────
+# Theme: No rest. Short gaps between waves, bosses arrive in two separate pairs,
+# fast shooters are now the baseline filler enemy throughout.
+level_12_seq = {
+    # Dense mixed opening - fast shooters from the start
+    60: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 4,   sine_pattern),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 256, tenth*2), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*3), 4,   ConstX()),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 256, tenth*4), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 4,   gentle_sine),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 256, tenth*6), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*7), 4,   sine_pattern),
+        SpawnCommand(basic_saucer,         (GAME_WIDTH + 256, tenth*8), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 4,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine)),
+    # Big saucers as shields for shooters behind them
+    450: CommandGroup(
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2.5, ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*5), 2.5, gentle_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*8), 2.5, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*2), 2.5, ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*5), 2.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*8), 2.5, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # First boss pair - escorted by fast shooters immediately
+    900: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*3), 2,   sine_pattern),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*7), 2,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*1), 3,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 3,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 3,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*8), 9,   crazy_sine)),
+    # Filler while first bosses are still alive
+    1500: CommandGroup(
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*2), 3.5, sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*4), 3.5, ConstX()),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*6), 3.5, sine_pattern),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 256, tenth*8), 3.5, ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Second boss pair arrives before the first pair may be dead
+    2100: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*2), 1.5, gentle_sine),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*8), 1.5, gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*4), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*6), 3,   sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*9), 9,   crazy_sine)),
+    # Full-screen denial
+    2800: CommandGroup(
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*2), 2,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 3.5, sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*5), 2,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 3.5, ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*8), 2,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 3.5, gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Third boss - solo but with maximum escort
+    3500: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 768, tenth*5), 2,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Last gasp while boss still lives
+    4300: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*3), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*7), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 4,   sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine)),
+    5400: None
+}
+
+# ── LEVEL 13 ──────────────────────────────────────────────────────────────────
+# Theme: Total war. Four bosses total across the level, back-to-back mini screens,
+# fast shooters as the default enemy, and no true gaps anywhere.
+level_13_seq = {
+    # Wall of fast shooters immediately — no warmup
+    0: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 5,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 5,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*3), 5,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 5,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 5,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 5,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*7), 5,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 5,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 5,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Big saucers + hidden fast shooters behind them
+    400: CommandGroup(
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*1), 3,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*1), 3,   ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*3), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*3), 3,   sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*5), 3,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*5), 3,   ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*7), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*7), 3,   sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 128, tenth*9), 3,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 384, tenth*9), 3,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*8), 9,   crazy_sine)),
+    # First boss - arrives early, players are still worn down from opening
+    800: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 768, tenth*5), 2,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Reinforce before boss might be dead
+    1200: CommandGroup(
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*2), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 4,   gentle_sine),
+        SpawnCommand(shooting_saucer,      (GAME_WIDTH + 128, tenth*6), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Second boss + escort while first may still be alive
+    1700: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*3), 2,   gentle_sine),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 640, tenth*7), 2,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*1), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*9), 4,   sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*8), 9,   crazy_sine)),
+    # Full mini screen + fast shooters - maximum clutter
+    2300: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*3), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*7), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 4,   ConstX()),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*8), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 256, tenth*9), 9,   crazy_sine)),
+    # Third boss + big saucer formation
+    3000: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 768, tenth*5), 2.5, gentle_sine),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*2), 3,   ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*4), 3,   sine_pattern),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*6), 3,   ConstX()),
+        SpawnCommand(big_saucer,           (GAME_WIDTH + 256, tenth*8), 3,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 512, tenth*3), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 512, tenth*7), 4,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    # Never-ending harassment while boss 3 is alive
+    3700: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*2), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*6), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   sine_pattern),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    # Fourth and final boss - everything at maximum
+    4500: CommandGroup(
+        SpawnCommand(boss_1,               (GAME_WIDTH + 768, tenth*3), 2.5, sine_pattern),
+        SpawnCommand(boss_1,               (GAME_WIDTH + 768, tenth*7), 2.5, sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*5), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 128, tenth*9), 9,   crazy_sine)),
+    5400: CommandGroup(
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*1), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*2), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*3), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*4), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*5), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*6), 4,   gentle_sine),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*7), 4,   sine_pattern),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 256, tenth*8), 4,   ConstX()),
+        SpawnCommand(fast_shooting_saucer, (GAME_WIDTH + 128, tenth*9), 4,   gentle_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*1), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*2), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*3), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*4), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*5), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*6), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*7), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*8), 9,   crazy_sine),
+        SpawnCommand(mini_saucer,          (GAME_WIDTH + 384, tenth*9), 9,   crazy_sine)),
+    6000: None
+}
+
 class GameLevel:
     def __init__(self, program, background):
         self.program = program
@@ -729,4 +1058,7 @@ game_levels = [
     GameLevel(level_8_seq, nebula_3_img),   # recycled backgrounds for 8-10
     GameLevel(level_9_seq, nebula_5_img),
     GameLevel(level_10_seq, nebula_7_img),
+    GameLevel(level_11_seq, nebula_1_img),
+    GameLevel(level_12_seq, nebula_4_img),
+    GameLevel(level_13_seq, nebula_7_img)
 ]

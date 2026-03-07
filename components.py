@@ -73,8 +73,8 @@ class Armor(Component):
         self.parent.max_hp = self.max_hp
         self.parent.hp_bar.max_level = self.max_hp
 
-armor_upgrade_scheme = [200, 300, 400, 500, 700, 900, 1200, 1500, 1900, 2300, 2800, 3500]
-armor_upgrade_costs = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
+armor_upgrade_scheme = [200, 300, 400, 500, 700, 900, 1200, 1500, 1900, 2300, 2800, 3500, 4000]
+armor_upgrade_costs = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000]
 
 player_armor = Armor(armor_upgrade_scheme, armor_upgrade_costs, armor_icon_0)
     
@@ -120,7 +120,7 @@ sm_laser_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500
 sm_laser_reload_time_scheme = [int(30 - x * 2.4) for x in range(13)]
 sm_laser_projectile_speed_scheme = [15, 15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18]
 sm_laser_damage_scheme = [10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15]
-sm_laser_enemy_reload_time_scheme = [150 - i*10 for i in range(13)]
+sm_laser_enemy_reload_time_scheme = [150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 60, 60, 60]
 
 gumball_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
 gumball_reload_time_scheme = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40]

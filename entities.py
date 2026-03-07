@@ -152,7 +152,7 @@ class Enemy(pygame.sprite.Sprite):
         self.kill_bonus = start_hp / 4
         self.hp = start_hp
         self.hp_bar = Health(self.rect.left, self.rect.bottom - 10, 64, 5, self.hp)
-        self.crash_damage = start_hp * 0.5
+        self.crash_damage = start_hp
         self.weapon = weapon
         self.tof = 0 # time of flight
 

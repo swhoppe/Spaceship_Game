@@ -21,11 +21,11 @@ from states import *
 # player_1.glam_image = noeys_ship_glam_img
 player_2 = Player(players, 'player_2', gabes_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 player_2.glam_image = gabes_ship_glam_img
-# player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-# player_3.glam_image = anikas_ship_glam_img
-# player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
-# player_4.glam_image = aletheas_ship_glam_img
-# player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+player_3 = Player(players, 'player_3', anikas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+player_3.glam_image = anikas_ship_glam_img
+player_4 = Player(players, 'player_4', aletheas_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
+player_4.glam_image = aletheas_ship_glam_img
+player_5 = Player(players, 'player_4', basic_ship_img, None, copy.copy(player_engine), copy.copy(player_armor), create_weapon_list())
 
 # assign controllers
 for i, player in enumerate(players['all']):
