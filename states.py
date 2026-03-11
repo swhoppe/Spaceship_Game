@@ -24,7 +24,7 @@ class State:
     def handle_input(self, events):
         pass
         
-    def update(self):
+    def update(self, dt):
         pass
 
     def draw(self, surface):
@@ -36,9 +36,9 @@ class Splash(State):
         self.timer = 0
         self.next_state = 'main_menu'
     
-    def update(self):
-        if self.timer < 60:
-            self.timer += 1
+    def update(self, dt):
+        if self.timer < 1:
+            self.timer += dt
         else:
             self.over = True
 
@@ -108,7 +108,7 @@ class SubMenu(Menu):
         else:
             self.icon = None
 
-    def update(self):
+    def update(self, dt):
         if self.player.submenu_states_rev[self.player.active_submenu] == 'ready':
             self.player.ready = True
         else:
@@ -170,7 +170,7 @@ class SelectionMenu(Menu):
         self.slot = slot
         self.button_group = None
     
-    def update(self):
+    def update(self, dt):
         self.component = self.option_list[self.selected_index]
 
     def handle_input(self, event):
@@ -282,9 +282,9 @@ class UpgradeMenu(Menu):
                 if submenu.button_group:
                     submenu.button_group.selected_index = None
 
-    def update(self):
+    def update(self, dt):
         for player in self.players:
-            player.active_submenu.update()
+            player.active_submenu.update(dt)
         if all(player.ready for player in self.players):
             self.over = True
         
@@ -309,6 +309,11 @@ class GamePlay(State):
         self.level = None
         self.level_timer = None
         self.star_motion_timer = 0
+
+        # star motion speed
+        self.near_speed = 60 # pixels per second
+        self.mid_speed = 30
+        self.far_speed = 20
     
     def reset(self, boundary):
         self.level = game_levels.pop(0)
@@ -345,13 +350,16 @@ class GamePlay(State):
                 if joystick.get_axis(4) > SHOOT_DEADZONE:
                     player.shoot(player.active_weapon_indices[1])
     
-    def update(self):
+    def update(self, dt):
+        self.level_timer += dt
+
         self.level.update(self.level_timer)
-        players['active'].update(self.boundary)
-        projectiles.update(self.boundary)
-        enemies.update(self.boundary)
-        effects.update()
-        self.level_timer += 1
+        players['active'].update(self.boundary, dt)
+        projectiles.update(self.boundary, dt)
+        enemies.update(self.boundary, dt)
+        effects.update(dt)
+        
+        self.star_motion_timer += dt
 
         if not players['active']:
             game_levels.insert(0, self.level)
@@ -366,14 +374,9 @@ class GamePlay(State):
     def draw(self, surface):
         surface.blit(self.level.background, (0, 0))
 
-        if self.star_motion_timer > 3 * GAME_WIDTH * 3:
-            self.star_motion_timer = 0
-
-        self.star_motion_timer +=1
-
-        surface.blit(stars_far_img, (-(self.star_motion_timer % (GAME_WIDTH*3))/3, 0))
-        surface.blit(stars_mid_img, (-(self.star_motion_timer % (GAME_WIDTH*2))/2, 0))
-        surface.blit(stars_near_img, (-(self.star_motion_timer % GAME_WIDTH), 0))
+        surface.blit(stars_far_img, (-((self.star_motion_timer * self.far_speed) % 2560), 0))
+        surface.blit(stars_mid_img, (-((self.star_motion_timer * self.mid_speed) % 2560), 0))
+        surface.blit(stars_near_img, (-((self.star_motion_timer * self.near_speed) % 2560), 0))
 
         for projectile in projectiles:
             projectile.draw(surface) 

@@ -71,16 +71,16 @@ class Player(pygame.sprite.Sprite):
         self.credits_txt_surf = font_lg.render(f"{self.credits:,.0f}", True, (0, 255, 0))
         self.credits_txt_rect = self.credits_txt_surf.get_rect()
 
-    def update(self, boundary):
+    def update(self, boundary, dt):
         inflated_boundary = boundary.inflate(0, BOUNDARY_MARGIN)
-        self.rect.move_ip(self.motion)
+        self.rect.move_ip(int(self.motion[0] * dt), int(self.motion[1] * dt))
 
         # clamp movement to bounds    
         self.rect.clamp_ip(inflated_boundary)
 
         for weapon in self.active_weapons:
             if weapon.reload_timer < weapon.reload_time:
-                weapon.reload_timer += 1
+                weapon.reload_timer += dt
 
         self.hp_bar.level = self.hp
         self.hp_bar.update()
@@ -114,7 +114,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self, weapon_index):
         weapon = self.weapon_list[weapon_index]
-        if weapon.reload_timer == weapon.reload_time:  
+        if weapon.reload_timer >= weapon.reload_time:  
             weapon.shoot(self.rect.center, self)
             weapon.reload_timer = 0
 
@@ -159,14 +159,14 @@ class Enemy(pygame.sprite.Sprite):
     def freeze(self, time):
         self.freeze_timer = time
     
-    def update(self, boundary):
+    def update(self, boundary, dt):
         self.velocity = self.move_pattern(self)
 
         if self.freeze_timer != 0:
-            self.freeze_timer -= 1
+            self.freeze_timer -= dt
         else:
-            self.tof += 1
-            self.rect.move_ip(int(self.velocity[0]), int(self.velocity[1]))
+            self.tof += dt
+            self.rect.move_ip(self.velocity[0]* dt, self.velocity[1] * dt)
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > GAME_HEIGHT:
@@ -192,7 +192,7 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.weapon:
             if self.weapon.reload_timer < self.weapon.reload_time:
-                self.weapon.reload_timer += 1
+                self.weapon.reload_timer += dt
             else:
                 self.shoot()
     
@@ -226,10 +226,10 @@ class Projectile(pygame.sprite.Sprite):
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
 
-    def update(self, boundary):
+    def update(self, boundary, dt):
         # motion
         self.velocity = self.move_pattern(self)
-        self.rect.move_ip(self.velocity[0], self.velocity[1])
+        self.rect.move_ip(self.velocity[0] * dt, self.velocity[1] * dt)
 
         # image rotation
         if self.move_pattern.directed:
@@ -280,8 +280,8 @@ class EffectSprite(pygame.sprite.Sprite):
         self.duration = duration
         effects.add(self)
     
-    def update(self):
-        self.duration -= 1
+    def update(self, dt):
+        self.duration -= dt
         if self.duration <= 0: self.kill()
 
 # effect factor functions

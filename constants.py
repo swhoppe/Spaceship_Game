@@ -1,11 +1,17 @@
+# game size
 GAME_WIDTH = 1280*1.5
 GAME_HEIGHT = 720*1.5
 SCALE_FACTOR = 1
 
+# deadzones and margins
 MOVE_DEADZONE = 0.05
 AIM_DEADZONE = 0.1
 SHOOT_DEADZONE = 0.1
 BOUNDARY_MARGIN = 256
 
+# framerate
+FRAMERATE_SET = 60
+
+# ui
 BUTTON_SIZE = (200, 50)
 BUTTON_COLORS = {'selected': (0, 255, 0), 'deselected': (50, 50, 50)}

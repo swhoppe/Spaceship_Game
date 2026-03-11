@@ -53,7 +53,7 @@ class Engine(Component):
     def push_upgrade_update(self):
         self.parent.move_speed = self.speed
 
-engine_upgrade_scheme = [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+engine_upgrade_scheme = [360, 480, 600, 720, 840, 960, 1080, 1200, 1320, 1440, 1560, 1680, 1800]
 engine_upgrade_costs = [2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12000]        
 
 player_engine = Engine(engine_upgrade_scheme, engine_upgrade_costs, engine_icon_0)
@@ -117,49 +117,49 @@ class Weapon(Component):
 
 # weapon upgrade schemes
 sm_laser_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
-sm_laser_reload_time_scheme = [int(30 - x * 2.4) for x in range(13)]
-sm_laser_projectile_speed_scheme = [15, 15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18]
+sm_laser_reload_time_scheme = [0.5, 0.45, 0.417, 0.367, 0.333, 0.3, 0.25, 0.217, 0.167, 0.133, 0.1, 0.05, 0.017]
+sm_laser_projectile_speed_scheme = [900, 900, 900, 900, 960, 960, 960, 1020, 1020, 1020, 1080, 1080, 1080]
 sm_laser_damage_scheme = [10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15]
-sm_laser_enemy_reload_time_scheme = [150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 60, 60, 60]
+sm_laser_enemy_reload_time_scheme = [2.5, 2.333, 2.167, 2.0, 1.833, 1.667, 1.5, 1.333, 1.167, 1.0, 1.0, 1.0, 1.0]
 
 gumball_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
-gumball_reload_time_scheme = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40]
-gumball_projectile_speed_scheme = [5, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
+gumball_reload_time_scheme = [1.667, 1.583, 1.5, 1.417, 1.333, 1.25, 1.167, 1.083, 1.0, 0.917, 0.833, 0.75, 0.667]
+gumball_projectile_speed_scheme = [300, 300, 300, 300, 360, 360, 360, 420, 420, 420, 480, 480, 480]
 gumball_damage_scheme = [15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18, 20]
 
 lava_ball_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
-lava_ball_reload_time_scheme = [200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 90, 80]
-lava_ball_projectile_speed_scheme = [5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9]
+lava_ball_reload_time_scheme = [3.333, 3.167, 3.0, 2.833, 2.667, 2.5, 2.333, 2.167, 2.0, 1.833, 1.667, 1.5, 1.333]
+lava_ball_projectile_speed_scheme = [300, 300, 300, 360, 360, 360, 420, 420, 420, 480, 480, 480, 540]
 lava_ball_damage_scheme = [25, 25, 30, 30, 35, 35, 40, 40, 45, 45, 50, 50, 55]
 
 beam_laser_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
-beam_laser_reload_time_scheme = [1]*13
-beam_laser_projectile_speed_scheme = [64]*13
+beam_laser_reload_time_scheme = [.01667]*13
+beam_laser_projectile_speed_scheme = [3840]*13
 beam_laser_damage_scheme = [i*0.3 for i in range(1, 14)]
 
 ice_ray_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
 ice_ray_reload_time_scheme = [0]*13
-ice_ray_projectile_speed_scheme = [64]*13
+ice_ray_projectile_speed_scheme = [3840]*13
 ice_ray_damage_scheme = [i*0.2 for i in range(1, 14)]
 
 mine_launcher_upgrade_costs = [500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000]
-mine_launcher_reload_time_scheme = [300 - i*10 for i in range(13)]
+mine_launcher_reload_time_scheme = [5.0, 4.833, 4.667, 4.5, 4.333, 4.167, 4.0, 3.833, 3.667, 3.5, 3.333, 3.167, 3.0]
 mine_launcher_speed_scheme = [0]*13
 mine_launcher_damage_scheme = [50 + i*5 for i in range(1, 14)]
 
 rocket_launcher_upgrade_costs = [1000 + i*500 for i in range(12)]
-rocket_launcher_reload_time_scheme = [200 - i*10 for i in range(13)]
-rocket_launcher_speed_scheme = [15]*13
+rocket_launcher_reload_time_scheme = [3.333, 3.167, 3.0, 2.833, 2.667, 2.5, 2.333, 2.167, 2.0, 1.833, 1.667, 1.5, 1.333]
+rocket_launcher_speed_scheme = [900]*13
 rocket_launcher_damage_scheme = [25 + i*5 for i in range(1, 14)]
 
 def create_weapon_list():
     """Creates a fresh set of weapons for a player"""
     return np.array([
         Weapon('BOLT LASER', sm_laser_bolt_img, sm_laser_icon, sm_laser_reload_time_scheme, sm_laser_projectile_speed_scheme, ConstX(), sm_laser_damage_scheme, sm_laser_upgrade_costs, None, None),
-        Weapon('GUM BLASTER', gumball_img, gum_blaster_icon, gumball_reload_time_scheme, gumball_projectile_speed_scheme, ConstX(), gumball_damage_scheme, gumball_upgrade_costs, create_gum_splat, 300),
-        Weapon('LAVA BLASTER', lava_ball_img, lava_blaster_icon, lava_ball_reload_time_scheme, lava_ball_projectile_speed_scheme, ConstX(), lava_ball_damage_scheme, lava_ball_upgrade_costs, create_lava_splat, 300),
+        Weapon('GUM BLASTER', gumball_img, gum_blaster_icon, gumball_reload_time_scheme, gumball_projectile_speed_scheme, ConstX(), gumball_damage_scheme, gumball_upgrade_costs, create_gum_splat, 5.0),
+        Weapon('LAVA BLASTER', lava_ball_img, lava_blaster_icon, lava_ball_reload_time_scheme, lava_ball_projectile_speed_scheme, ConstX(), lava_ball_damage_scheme, lava_ball_upgrade_costs, create_lava_splat, 5.0),
         Weapon('BEAM LASER', beam_laser_img, beam_laser_icon, beam_laser_reload_time_scheme, beam_laser_projectile_speed_scheme, TrackParent(), beam_laser_damage_scheme, beam_laser_upgrade_costs, None, None),
-        Weapon('ICE RAY', ice_ray_img, ice_ray_icon, ice_ray_reload_time_scheme, ice_ray_projectile_speed_scheme, TrackParent(), ice_ray_damage_scheme, ice_ray_upgrade_costs, None, 1),
+        Weapon('ICE RAY', ice_ray_img, ice_ray_icon, ice_ray_reload_time_scheme, ice_ray_projectile_speed_scheme, TrackParent(), ice_ray_damage_scheme, ice_ray_upgrade_costs, None, 0.016667),
         Weapon('MINE LAUNCHER', mine_img, None, mine_launcher_reload_time_scheme, mine_launcher_speed_scheme, ConstX(), mine_launcher_damage_scheme, mine_launcher_upgrade_costs, None, None),
         Weapon('ROCKETS', rocket_img, None, rocket_launcher_reload_time_scheme, rocket_launcher_speed_scheme, GuidedMissile(), rocket_launcher_damage_scheme, rocket_launcher_upgrade_costs, None, None)
     ])
