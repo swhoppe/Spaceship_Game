@@ -62,3 +62,26 @@ class GuidedMissile(MovePattern):
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
 crazy_sine = SinePattern(8, 3)
+
+### move_packs ###
+
+class MovePack:
+    def __init__(self):
+        pass
+
+    def update(self, dt):
+        pass
+
+class Impulse(MovePack):
+    def __init__(self, vector, magnitude):
+        super().__init__()
+        self.transient = True
+        self.active = True
+        self.vector = vector * magnitude
+    
+    def update(self, dt):
+        output = self.vector
+        self.vector = self.vector * (0.85**(dt*60)) # decay by multiple of 0.85 every 1/60th of a second
+        if np.linalg.norm(self.vector) < 0.0001:
+            self.active = False
+        return output

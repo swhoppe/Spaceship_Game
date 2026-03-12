@@ -108,6 +108,7 @@ class Weapon(Component):
         new_projectile = Projectile(self.proj_img, start_location, self.proj_move_pattern, self.proj_speed, self.damage, self.impact_sprite_img, parent)
         new_projectile.freeze = self.freeze
         projectiles.add(new_projectile)
+        parent.move_packs.append(Impulse(np.array([-1, 0]), 1000))
 
     def set_level(self, level):
         self.upgrade_level = level

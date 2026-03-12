@@ -38,10 +38,13 @@ class Player(pygame.sprite.Sprite):
         self.rect = image.get_rect()
 
         self.controller_number = controller_number
-        self.motion = np.array([0, 0])
+
+        #motion
+        self.motion = np.array([0.0, 0.0])
         self.engine = engine
         self.components.append(self.engine)
         self.move_speed = self.engine.speed
+        self.move_packs = []
 
         #health
         self.armor = armor
@@ -73,7 +76,15 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, boundary, dt):
         inflated_boundary = boundary.inflate(0, BOUNDARY_MARGIN)
-        self.rect.move_ip(int(self.motion[0] * dt), int(self.motion[1] * dt))
+        self.velocity = self.motion
+
+        if len(self.move_packs) > 0:
+            for pack in self.move_packs:
+                self.velocity += pack.update(dt)
+                if not pack.active:
+                    self.move_packs.remove(pack)
+
+        self.rect.move_ip(int(self.velocity[0] * dt), int(self.velocity[1] * dt))
 
         # clamp movement to bounds    
         self.rect.clamp_ip(inflated_boundary)
@@ -155,6 +166,7 @@ class Enemy(pygame.sprite.Sprite):
         self.crash_damage = start_hp
         self.weapon = weapon
         self.tof = 0 # time of flight
+        self.move_packs = []
 
     def freeze(self, time):
         self.freeze_timer = time
