@@ -38,7 +38,7 @@ class TrackParent(MovePattern):
     def __call__(self, obj):
         delta_y = obj.parent.rect.y - obj.last_y_pos
         obj.last_y_pos = obj.parent.rect.y
-        return np.array([obj.speed, delta_y])
+        return np.array([obj.speed, delta_y*60])
     
 class GuidedMissile(MovePattern):
     def __init__(self):
