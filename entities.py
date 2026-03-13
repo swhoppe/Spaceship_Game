@@ -162,7 +162,7 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, boundary, dt):
         self.velocity = self.move_pattern(self)
 
-        if self.freeze_timer != 0:
+        if self.freeze_timer > 0:
             self.freeze_timer -= dt
         else:
             self.tof += dt
