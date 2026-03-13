@@ -85,3 +85,26 @@ class Impulse(MovePack):
         if np.linalg.norm(self.vector) < 0.0001:
             self.active = False
         return output
+    
+def apply_move_pack(move_pack, target):
+    target.move_packs.append(move_pack)    
+
+class Recoil:
+    def __init__(self, vector, magnitude):
+        self.vector = vector
+        self.magnitude = magnitude
+    
+    def apply(self, target):
+        apply_move_pack(Impulse(self.vector, self.magnitude), target)
+
+class Impact:
+    def __init__(self, range, magnitude):
+        self.range = range
+        self.magnitude = magnitude
+
+    def apply(self, position, target):
+        vector = np.array(target.rect.center) - np.array(position)
+        norm = np.linalg.norm(vector) 
+        vector = vector / norm
+        if norm < self.range:
+            apply_move_pack(Impulse(vector, self.magnitude), target)

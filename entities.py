@@ -158,7 +158,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = self.start_position
         self.move_pattern = move_pattern
         self.speed = - speed
-        self.velocity = np.array([self.speed, 0])
+        self.motion = np.array([self.speed, 0.0])
+        self.velocity = np.array([0.0, 0.0])
         self.freeze_timer = 0
         self.kill_bonus = start_hp / 4
         self.hp = start_hp
@@ -172,7 +173,15 @@ class Enemy(pygame.sprite.Sprite):
         self.freeze_timer = time
     
     def update(self, boundary, dt):
-        self.velocity = self.move_pattern(self)
+        self.motion = self.move_pattern(self)
+
+        self.velocity = self.motion.astype(float)
+
+        if len(self.move_packs) > 0:
+            for pack in self.move_packs:
+                self.velocity += pack.update(dt)
+                if not pack.active:
+                    self.move_packs.remove(pack)
 
         if self.freeze_timer != 0:
             self.freeze_timer -= dt
@@ -217,7 +226,7 @@ class Enemy(pygame.sprite.Sprite):
         surface.blit(self.hp_bar.image, (self.hp_bar.rect))
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, image, start_location, move_pattern, speed, damage, impact_sprite_img, parent):
+    def __init__(self, image, start_location, move_pattern, speed, damage, impact_sprite_img, impact, parent):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
@@ -232,9 +241,13 @@ class Projectile(pygame.sprite.Sprite):
         self.parent = parent
         self.freeze = None
         self.impact_sprite = impact_sprite_img
+        self.impact = impact
         self.move_pattern.init_state(self)
     
-    def impact(self):
+    def hit(self):
+        if self.impact:
+            for enemy in enemies:
+                self.impact.apply(self.rect.center, enemy)
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
 
@@ -261,7 +274,7 @@ class Projectile(pygame.sprite.Sprite):
                         self.parent.credits += enemy.kill_bonus
                     if self.freeze != None:
                         enemy.freeze_timer = self.freeze
-                    self.impact()
+                    self.hit()
                     self.kill()
     
         if isinstance(self.parent, Enemy):
@@ -269,7 +282,7 @@ class Projectile(pygame.sprite.Sprite):
                 if player.mask.overlap(self.mask, (self.rect[0] - player.rect[0], self.rect[1] - player.rect[1])):
                     player.hp -= self.damage
                     player.rumble(0.2, 0.4, 40)
-                    self.impact()
+                    self.hit()
                     self.kill()
 
         # kill once off screen
