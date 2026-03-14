@@ -98,13 +98,16 @@ class Recoil:
         apply_move_pack(Impulse(self.vector, self.magnitude), target)
 
 class Impact:
-    def __init__(self, range, magnitude):
-        self.range = range
+    def __init__(self, radius, magnitude):
+        self.radius = radius
         self.magnitude = magnitude
 
     def apply(self, position, target):
         vector = np.array(target.rect.center) - np.array(position)
-        norm = np.linalg.norm(vector) 
-        vector = vector / norm
-        if norm < self.range:
-            apply_move_pack(Impulse(vector, self.magnitude), target)
+        norm = np.linalg.norm(vector)
+        if norm < 0.0001:
+            return
+        else:
+            if norm < self.radius:
+                vector = vector / norm
+                apply_move_pack(Impulse(vector, self.magnitude), target)
