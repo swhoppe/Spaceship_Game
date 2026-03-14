@@ -40,10 +40,10 @@ class Player(pygame.sprite.Sprite):
         self.controller_number = controller_number
 
         #motion
-        self.motion = np.array([0.0, 0.0])
+        self.input_velocity = np.array([0.0, 0.0])
         self.engine = engine
         self.components.append(self.engine)
-        self.move_speed = self.engine.speed
+        self.speed = self.engine.speed
         self.move_packs = []
 
         #health
@@ -76,7 +76,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, boundary, dt):
         inflated_boundary = boundary.inflate(0, BOUNDARY_MARGIN)
-        self.velocity = self.motion
+        self.velocity = self.input_velocity.copy()
 
         if len(self.move_packs) > 0:
             for pack in self.move_packs:
@@ -157,8 +157,8 @@ class Enemy(pygame.sprite.Sprite):
         self.x = float(self.start_position[0])
         self.rect.center = self.start_position
         self.move_pattern = move_pattern
-        self.speed = - speed
-        self.motion = np.array([self.speed, 0.0])
+        self.speed = -speed
+        self.input_velocity = None
         self.velocity = np.array([0.0, 0.0])
         self.freeze_timer = 0
         self.kill_bonus = start_hp / 4
@@ -173,9 +173,8 @@ class Enemy(pygame.sprite.Sprite):
         self.freeze_timer = time
     
     def update(self, boundary, dt):
-        self.motion = self.move_pattern(self)
-
-        self.velocity = self.motion.astype(float)
+        self.input_velocity = self.move_pattern(self).astype(float)
+        self.velocity = self.input_velocity.copy()
 
         if len(self.move_packs) > 0:
             for pack in self.move_packs:

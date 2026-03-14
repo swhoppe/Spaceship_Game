@@ -265,11 +265,11 @@ mine_launcher_config = WeaponConfig(
     proj_image=mine_img,
     reload_time_scheme=[5.0, 4.833, 4.667, 4.5, 4.333, 4.167, 4.0, 3.833, 3.667, 3.5, 3.333, 3.167, 3.0],
     projectile_speed_scheme=[0]*13,
-    damage_scheme=[50 + i*5 for i in range(1, 14)],
+    damage_scheme=[35 + i*5 for i in range(13)],
     freeze_scheme=None,
     recoil_scheme=None,
-    impact_radius_scheme=[200 + i*12 for i in range(13)],
-    impact_magnitude_scheme=[650 + i*75 for i in range(13)],
+    impact_radius_scheme=[250 + i*12 for i in range(13)],
+    impact_magnitude_scheme=[750 + i*75 for i in range(13)],
 )
 
 rockets_config = WeaponConfig(

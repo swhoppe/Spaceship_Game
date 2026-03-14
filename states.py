@@ -343,7 +343,7 @@ class GamePlay(State):
                 if abs(axis_y) < MOVE_DEADZONE:
                     axis_y = 0
                 
-                player.motion = (axis_x * player.move_speed, axis_y * player.move_speed)
+                player.input_velocity = np.array([axis_x * player.speed, axis_y * player.speed])
 
                 if joystick.get_axis(5) > SHOOT_DEADZONE:
                     player.shoot(player.active_weapon_indices[0])
