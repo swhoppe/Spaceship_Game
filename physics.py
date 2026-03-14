@@ -102,12 +102,15 @@ class Impact:
         self.radius = radius
         self.magnitude = magnitude
 
-    def apply(self, position, target):
+    def apply(self, position, target, damage):
         vector = np.array(target.rect.center) - np.array(position)
-        norm = np.linalg.norm(vector)
-        if norm < 0.0001:
+        distance = np.linalg.norm(vector)
+        if distance < 0.0001:
             return
         else:
-            if norm < self.radius:
-                vector = vector / norm
-                apply_move_pack(Impulse(vector, self.magnitude), target)
+            if distance < self.radius:
+                vector = vector / distance
+                scaled_mag = self.magnitude*((1-distance/self.radius)**0.5)
+                apply_move_pack(Impulse(vector, scaled_mag), target)
+                if hasattr(target, 'hp'):
+                    target.hp -= damage*((1-distance/self.radius)**0.5)

@@ -183,7 +183,7 @@ class Enemy(pygame.sprite.Sprite):
                 if not pack.active:
                     self.move_packs.remove(pack)
 
-        if self.freeze_timer != 0:
+        if self.freeze_timer > 0:
             self.freeze_timer -= dt
         else:
             self.tof += dt
@@ -244,10 +244,12 @@ class Projectile(pygame.sprite.Sprite):
         self.impact = impact
         self.move_pattern.init_state(self)
     
-    def hit(self):
+    def hit(self, struck_target=None):
         if self.impact:
             for enemy in enemies:
-                self.impact.apply(self.rect.center, enemy)
+                if enemy is struck_target:
+                    continue
+                self.impact.apply(self.rect.center, enemy, self.damage)
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
 
@@ -274,7 +276,7 @@ class Projectile(pygame.sprite.Sprite):
                         self.parent.credits += enemy.kill_bonus
                     if self.freeze != None:
                         enemy.freeze_timer = self.freeze
-                    self.hit()
+                    self.hit(enemy)
                     self.kill()
     
         if isinstance(self.parent, Enemy):

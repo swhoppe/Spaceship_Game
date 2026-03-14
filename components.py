@@ -71,10 +71,11 @@ class Engine(Component):
     def __init__(self, config):
         super().__init__(config)
         self.speed_scheme = config.speed_scheme
-        self.update()
 
         assert len(self.upgrade_costs)+1 == len(self.speed_scheme), 'Scheme-list length mismatch.'
 
+        self.update()
+        
     def update(self):
         self.speed = self.speed_scheme[self.upgrade_level]
         self.specs = {'level': self.upgrade_level, "speed": self.speed}
@@ -94,13 +95,14 @@ player_engine = Engine(player_engine_config)
 class Armor(Component):
     def __init__(self, config):
         super().__init__(config)
-        self.upgrade_scheme = config.hp_scheme
+        self.hp_scheme = config.hp_scheme
+
+        assert len(self.upgrade_costs)+1==len(self.hp_scheme), 'Scheme-list length mismatch.'
+
         self.update()
 
-        assert len(self.upgrade_costs)+1==len(self.upgrade_scheme), 'Scheme-list length mismatch.'
-
     def update(self):
-        self.max_hp = self.upgrade_scheme[self.upgrade_level]
+        self.max_hp = self.hp_scheme[self.upgrade_level]
         self.specs = {'level': self.upgrade_level, 'max health': self.max_hp}
 
     def push_upgrade_update(self):
@@ -109,7 +111,7 @@ class Armor(Component):
 
 player_armor_config = ArmorConfig(
     name='ARMOR',
-    icon=engine_icon_0,
+    icon=armor_icon_0,
     upgrade_costs=[1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000],
     hp_scheme=[200, 300, 400, 500, 700, 900, 1200, 1500, 1900, 2300, 2800, 3500, 4000]
 )
@@ -138,8 +140,6 @@ class Weapon(Component):
 
         self.parent = None
 
-        self.update()
-
         assert len(self.upgrade_costs)+1 == len(self.reload_time_scheme), 'Scheme-list length mismatch.'
         assert len(self.upgrade_costs)+1 == len(self.projectile_speed_scheme), 'Scheme-list length mismatch.'
         assert len(self.upgrade_costs)+1 == len(self.damage_scheme), 'Scheme-list length mismatch.'
@@ -151,6 +151,7 @@ class Weapon(Component):
             assert len(self.upgrade_costs)+1 == len(self.impact_radius_scheme), 'Scheme-list length mismatch.'
             assert len(self.upgrade_costs)+1 == len(self.impact_magnitude_scheme), 'Scheme-list length mismatch.'
 
+        self.update()
 
     def update(self):
         self.reload_time = self.reload_time_scheme[self.upgrade_level]
@@ -251,7 +252,7 @@ ice_ray_config = WeaponConfig(
     reload_time_scheme=[0.01667]*13,
     projectile_speed_scheme=[3840]*13,
     damage_scheme=[i*0.2 for i in range(1, 14)],
-    freeze_scheme=[0.0166667]*13,
+    freeze_scheme=[0.02]*13,
     recoil_scheme=None,
     impact_radius_scheme=None,
     impact_magnitude_scheme=None,
@@ -267,8 +268,8 @@ mine_launcher_config = WeaponConfig(
     damage_scheme=[50 + i*5 for i in range(1, 14)],
     freeze_scheme=None,
     recoil_scheme=None,
-    impact_radius_scheme=[30]*13,
-    impact_magnitude_scheme=[300]*13,
+    impact_radius_scheme=[200 + i*12 for i in range(13)],
+    impact_magnitude_scheme=[650 + i*75 for i in range(13)],
 )
 
 rockets_config = WeaponConfig(
@@ -281,8 +282,8 @@ rockets_config = WeaponConfig(
     damage_scheme=[25 + i*5 for i in range(1, 14)],
     freeze_scheme=None,
     recoil_scheme=None,
-    impact_radius_scheme=[20]*13,
-    impact_magnitude_scheme=[200]*13,
+    impact_radius_scheme=[180 + i*10 for i in range(13)],
+    impact_magnitude_scheme=[500 + i*50 for i in range(13)],
 )
 
 def create_weapon_list():
