@@ -76,7 +76,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, boundary, dt):
         inflated_boundary = boundary.inflate(0, BOUNDARY_MARGIN)
-        self.velocity = self.input_velocity.copy()
+        self.velocity = self.input_velocity.copy().astype(float)
 
         if len(self.move_packs) > 0:
             for pack in self.move_packs:
@@ -162,6 +162,7 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = np.array([0.0, 0.0])
         self.freeze_timer = 0
         self.kill_bonus = start_hp / 4
+        self.max_hp = start_hp
         self.hp = start_hp
         self.hp_bar = Health(self.rect.left, self.rect.bottom - 10, 64, 5, self.hp)
         self.crash_damage = start_hp
@@ -178,7 +179,7 @@ class Enemy(pygame.sprite.Sprite):
 
         if len(self.move_packs) > 0:
             for pack in self.move_packs:
-                self.velocity += pack.update(dt)
+                self.velocity += pack.update(dt) * ((100 / self.max_hp)**0.5)
                 if not pack.active:
                     self.move_packs.remove(pack)
 

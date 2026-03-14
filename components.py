@@ -196,7 +196,7 @@ bolt_laser_config = WeaponConfig(
     projectile_speed_scheme=[900, 900, 900, 900, 960, 960, 960, 1020, 1020, 1020, 1080, 1080, 1080],
     damage_scheme=[10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15],
     freeze_scheme=None,
-    recoil_scheme=None,
+    recoil_scheme=[0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 80, 110, 150],
     impact_radius_scheme=None,
     impact_magnitude_scheme=None
 )
@@ -210,7 +210,7 @@ gum_blaster_config = WeaponConfig(
     projectile_speed_scheme=[300, 300, 300, 300, 360, 360, 360, 420, 420, 420, 480, 480, 480],
     damage_scheme=[15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18, 20],
     freeze_scheme=[5]*13,
-    recoil_scheme=None,
+    recoil_scheme=[i*30 for i in range(13)],
     impact_radius_scheme=None,
     impact_magnitude_scheme=None
 )
@@ -224,7 +224,7 @@ lava_blaster_config = WeaponConfig(
     projectile_speed_scheme=[300, 300, 300, 360, 360, 360, 420, 420, 420, 480, 480, 480, 540],
     damage_scheme=[25, 25, 30, 30, 35, 35, 40, 40, 45, 45, 50, 50, 55],
     freeze_scheme=[6]*13,
-    recoil_scheme=None,
+    recoil_scheme=[i*40 for i in range(13)],
     impact_radius_scheme=None,
     impact_magnitude_scheme=None
 )

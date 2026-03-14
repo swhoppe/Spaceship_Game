@@ -80,7 +80,7 @@ class Impulse(MovePack):
         self.vector = vector * magnitude
     
     def update(self, dt):
-        output = self.vector
+        output = self.vector.astype(float)
         self.vector = self.vector * (0.85**(dt*60)) # decay by multiple of 0.85 every 1/60th of a second
         if np.linalg.norm(self.vector) < 0.0001:
             self.active = False
