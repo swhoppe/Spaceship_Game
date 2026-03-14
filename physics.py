@@ -62,3 +62,61 @@ class GuidedMissile(MovePattern):
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
 crazy_sine = SinePattern(8, 3)
+
+### move_packs ###
+
+class MovePack:
+    def __init__(self):
+        pass
+
+    def update(self, dt):
+        pass
+
+class Impulse(MovePack):
+    def __init__(self, vector, magnitude):
+        super().__init__()
+        self.transient = True
+        self.active = True
+        self.vector = vector * magnitude
+    
+    def update(self, dt):
+        output = self.vector.astype(float)
+        self.vector = self.vector * (0.85**(dt*60)) # decay by multiple of 0.85 every 1/60th of a second
+        if np.linalg.norm(self.vector) < 0.0001:
+            self.active = False
+        return output
+    
+def apply_move_pack(move_pack, target):
+    target.move_packs.append(move_pack)    
+
+class Recoil:
+    def __init__(self, vector, magnitude):
+        self.vector = vector
+        self.magnitude = magnitude
+    
+    def apply(self, target):
+        apply_move_pack(Impulse(self.vector, self.magnitude), target)
+
+class Impact:
+    def __init__(self, radius, magnitude):
+        self.radius = radius
+        self.magnitude = magnitude
+
+    def apply(self, position, target, damage):
+        vector = np.array(target.rect.center) - np.array(position)
+        distance = np.linalg.norm(vector)
+        if distance < 0.0001:
+            return
+        else:
+            if distance < self.radius:
+                vector = vector / distance
+                scaled_mag = self.magnitude*((1-distance/self.radius)**0.5)
+                apply_move_pack(Impulse(vector, scaled_mag), target)
+                if hasattr(target, 'hp'):
+                    target.hp -= damage*((1-distance/self.radius)**0.5)
+    
+    def detonate(self, position, target):
+        vector = np.array(target.rect.center) - np.array(position)
+        distance = np.linalg.norm(vector)
+        if distance < self.radius:
+            target.hit()
