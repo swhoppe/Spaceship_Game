@@ -226,7 +226,7 @@ class Enemy(pygame.sprite.Sprite):
         surface.blit(self.hp_bar.image, (self.hp_bar.rect))
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, image, start_location, move_pattern, speed, damage, impact_sprite_img, impact, parent):
+    def __init__(self, image, start_location, move_pattern, speed, damage, impact_sprite_img, impact, detonable, parent):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
@@ -242,16 +242,29 @@ class Projectile(pygame.sprite.Sprite):
         self.freeze = None
         self.impact_sprite = impact_sprite_img
         self.impact = impact
+        self.detonable = detonable
+        self.detonated = False
         self.move_pattern.init_state(self)
     
     def hit(self, struck_target=None):
+        
+        if self.detonated:
+            return
+        
+        self.detonated = True
+
         if self.impact:
             for enemy in enemies:
                 if enemy is struck_target:
                     continue
                 self.impact.apply(self.rect.center, enemy, self.damage)
+            for projectile in projectiles:
+                if projectile != self and projectile.detonable:
+                    projectile.hit()
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
+        
+        self.kill()
 
     def update(self, boundary, dt):
         # motion
@@ -277,7 +290,6 @@ class Projectile(pygame.sprite.Sprite):
                     if self.freeze != None:
                         enemy.freeze_timer = self.freeze
                     self.hit(enemy)
-                    self.kill()
     
         if isinstance(self.parent, Enemy):
             for player in players['active']:

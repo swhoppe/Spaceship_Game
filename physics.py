@@ -114,3 +114,9 @@ class Impact:
                 apply_move_pack(Impulse(vector, scaled_mag), target)
                 if hasattr(target, 'hp'):
                     target.hp -= damage*((1-distance/self.radius)**0.5)
+    
+    def detonate(self, position, target):
+        vector = np.array(target.rect.center) - np.array(position)
+        distance = np.linalg.norm(vector)
+        if distance < self.radius:
+            target.hit()

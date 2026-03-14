@@ -29,6 +29,7 @@ class WeaponConfig(ComponentConfig):
     recoil_scheme: list
     impact_radius_scheme: list
     impact_magnitude_scheme: list
+    detonable: bool
 
 class Component:
     def __init__(self, config):
@@ -130,6 +131,7 @@ class Weapon(Component):
         self.recoil_scheme = config.recoil_scheme
         self.impact_radius_scheme = config.impact_radius_scheme
         self.impact_magnitude_scheme = config.impact_magnitude_scheme
+        self.detonable = config.detonable
         
         self.recoil = None
         self.impact = None
@@ -177,7 +179,7 @@ class Weapon(Component):
                       'freeze time': self.freeze}
 
     def shoot(self, start_location, parent):
-        new_projectile = Projectile(self.proj_img, start_location, self.proj_move_pattern, self.proj_speed, self.damage, self.impact_sprite_img, self.impact, parent)
+        new_projectile = Projectile(self.proj_img, start_location, self.proj_move_pattern, self.proj_speed, self.damage, self.impact_sprite_img, self.impact, self.detonable, parent)
         new_projectile.freeze = self.freeze
         projectiles.add(new_projectile)
         if self.recoil:
@@ -198,7 +200,8 @@ bolt_laser_config = WeaponConfig(
     freeze_scheme=None,
     recoil_scheme=[0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 80, 110, 150],
     impact_radius_scheme=None,
-    impact_magnitude_scheme=None
+    impact_magnitude_scheme=None,
+    detonable=False
 )
 
 gum_blaster_config = WeaponConfig(
@@ -212,7 +215,8 @@ gum_blaster_config = WeaponConfig(
     freeze_scheme=[5]*13,
     recoil_scheme=[i*30 for i in range(13)],
     impact_radius_scheme=None,
-    impact_magnitude_scheme=None
+    impact_magnitude_scheme=None,
+    detonable=False
 )
 
 lava_blaster_config = WeaponConfig(
@@ -226,7 +230,8 @@ lava_blaster_config = WeaponConfig(
     freeze_scheme=[6]*13,
     recoil_scheme=[i*40 for i in range(13)],
     impact_radius_scheme=None,
-    impact_magnitude_scheme=None
+    impact_magnitude_scheme=None,
+    detonable=False
 )
 
 beam_laser_config = WeaponConfig(
@@ -241,6 +246,7 @@ beam_laser_config = WeaponConfig(
     recoil_scheme=None,
     impact_radius_scheme=None,
     impact_magnitude_scheme=None,
+    detonable=False
 )
 
 
@@ -256,6 +262,7 @@ ice_ray_config = WeaponConfig(
     recoil_scheme=None,
     impact_radius_scheme=None,
     impact_magnitude_scheme=None,
+    detonable=False
 )
 
 mine_launcher_config = WeaponConfig(
@@ -270,6 +277,7 @@ mine_launcher_config = WeaponConfig(
     recoil_scheme=None,
     impact_radius_scheme=[250 + i*12 for i in range(13)],
     impact_magnitude_scheme=[750 + i*75 for i in range(13)],
+    detonable=True
 )
 
 rockets_config = WeaponConfig(
@@ -284,6 +292,7 @@ rockets_config = WeaponConfig(
     recoil_scheme=None,
     impact_radius_scheme=[180 + i*10 for i in range(13)],
     impact_magnitude_scheme=[500 + i*50 for i in range(13)],
+    detonable=True
 )
 
 def create_weapon_list():
@@ -309,7 +318,8 @@ enemy_laser_config = WeaponConfig(
     freeze_scheme=None,
     recoil_scheme=None,
     impact_radius_scheme=None,
-    impact_magnitude_scheme=None
+    impact_magnitude_scheme=None,
+    detonable=False
 )
 
 #enemy
