@@ -290,8 +290,8 @@ rockets_config = WeaponConfig(
     damage_scheme=[25 + i*5 for i in range(1, 14)],
     freeze_scheme=None,
     recoil_scheme=None,
-    impact_radius_scheme=[180 + i*10 for i in range(13)],
-    impact_magnitude_scheme=[500 + i*50 for i in range(13)],
+    impact_radius_scheme=[250 + i*15 for i in range(13)],
+    impact_magnitude_scheme=[500 + i*100 for i in range(13)],
     detonable=True
 )
 
@@ -312,7 +312,7 @@ enemy_laser_config = WeaponConfig(
     icon=sm_laser_icon,
     upgrade_costs=[500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000],
     proj_image=enemy_laser_bolt_img,
-    reload_time_scheme=[0.5, 0.45, 0.417, 0.367, 0.333, 0.3, 0.25, 0.217, 0.167, 0.133, 0.1, 0.05, 0.017],
+    reload_time_scheme=[1.5 - i*0.1 for i in range(13)],
     projectile_speed_scheme=[-x for x in [900, 900, 900, 900, 960, 960, 960, 1020, 1020, 1020, 1080, 1080, 1080]],
     damage_scheme=[10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15],
     freeze_scheme=None,

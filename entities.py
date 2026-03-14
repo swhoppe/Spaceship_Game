@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = self.input_velocity.copy().astype(float)
 
         if len(self.move_packs) > 0:
-            for pack in self.move_packs:
+            for pack in self.move_packs[:]:
                 self.velocity += pack.update(dt)
                 if not pack.active:
                     self.move_packs.remove(pack)
@@ -178,7 +178,7 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = self.input_velocity.copy()
 
         if len(self.move_packs) > 0:
-            for pack in self.move_packs:
+            for pack in self.move_packs[:]:
                 self.velocity += pack.update(dt) * ((100 / self.max_hp)**0.5)
                 if not pack.active:
                     self.move_packs.remove(pack)
@@ -260,7 +260,7 @@ class Projectile(pygame.sprite.Sprite):
                 self.impact.apply(self.rect.center, enemy, self.damage)
             for projectile in projectiles:
                 if projectile != self and projectile.detonable:
-                    projectile.hit()
+                    self.impact.detonate(self.rect.center, projectile)
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
         

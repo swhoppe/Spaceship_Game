@@ -61,7 +61,7 @@ lava_ball_img = load_image("images/lava_ball.png", (64, 64))
 beam_laser_img = load_image("images/beam_laser_proj.png")
 ice_ray_img = load_image("images/ice_ray_proj.png")
 mine_img = load_image("images/mine.png")
-rocket_img = load_image("images/rocket.png", (64, 64))
+rocket_img = load_image("images/rocket.png")
 
 sm_laser_icon = load_image("images/sm_laser_icon_0.png", (256, 256))
 gum_blaster_icon = load_image("images/gum_blaster_icon_0.png", (256, 256))
