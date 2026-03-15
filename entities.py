@@ -24,6 +24,23 @@ class Health(StatusBar):
         pygame.draw.rect(self.image, "red", (0, 0, self.rect.width, self.rect.height))
         pygame.draw.rect(self.image, "green", (0, 0, self.rect.width * ratio, self.rect.height))
 
+class ReloadBar(StatusBar):
+    def __init__(self, x, y, w, h, reload_time):
+        super().__init__(x, y, w, h, reload_time)
+
+    def update(self, reload_time, reload_timer):
+        self.max_level = reload_time
+        self.level = reload_timer
+        if self.max_level == 0:
+            return
+        ratio = self.level / self.max_level
+        self.image.fill((0, 0, 0, 0))
+        if self.level >= self.max_level:
+            color = (0, 127, 255)
+        else:
+            color = (100, 100, 100)
+        pygame.draw.rect(self.image, color, (0, 0, self.rect.width * ratio, self.rect.height))
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups_dict, name, image, controller_number, engine, armor, weapon_list):
         super().__init__(*groups_dict.values())
@@ -89,9 +106,13 @@ class Player(pygame.sprite.Sprite):
         # clamp movement to bounds    
         self.rect.clamp_ip(inflated_boundary)
 
-        for weapon in self.active_weapons:
+        for index, weapon in enumerate(self.active_weapons):
             if weapon.reload_timer < weapon.reload_time:
                 weapon.reload_timer += dt
+            if weapon.reload_bar:
+                weapon.reload_bar.update(weapon.reload_time, weapon.reload_timer)
+                weapon.reload_bar.rect.y = self.rect.y + (index * 5)
+                weapon.reload_bar.rect.x = self.rect.centerx - weapon.reload_bar.rect.width/2
 
         self.hp_bar.level = self.hp
         self.hp_bar.update()
@@ -122,6 +143,10 @@ class Player(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
         # draw hp_bar
         surface.blit(self.hp_bar.image, (self.hp_bar.rect))
+        # draw reload bar(s)
+        for weapon in self.active_weapons:
+            if weapon.reload_bar:
+                surface.blit(weapon.reload_bar.image, (weapon.reload_bar.rect))
 
     def shoot(self, weapon_index):
         weapon = self.weapon_list[weapon_index]

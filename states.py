@@ -317,6 +317,7 @@ class GamePlay(State):
     
     def reset(self, boundary):
         self.level = game_levels.pop(0)
+        self.level.reset()
         self.level_timer = 0
         self.boundary = boundary
         

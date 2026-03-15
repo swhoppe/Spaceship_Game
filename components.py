@@ -133,6 +133,8 @@ class Weapon(Component):
         self.impact_magnitude_scheme = config.impact_magnitude_scheme
         self.detonable = config.detonable
         
+        self.reload_bar = None
+        
         self.recoil = None
         self.impact = None
 
@@ -161,6 +163,11 @@ class Weapon(Component):
         self.proj_move_pattern = self.move_pattern
         self.proj_speed = self.projectile_speed_scheme[self.upgrade_level]
         self.damage = self.damage_scheme[self.upgrade_level]
+
+        if self.reload_time >= 1.0:
+            self.reload_bar = ReloadBar(0, 0, 64, 5, self.reload_time)
+        else:
+            self.reload_bar = None
 
         if self.freeze_scheme:
             self.freeze = self.freeze_scheme[self.upgrade_level]
@@ -286,7 +293,7 @@ rockets_config = WeaponConfig(
     upgrade_costs=[1000 + i*500 for i in range(12)],
     proj_image=rocket_img,
     reload_time_scheme=[3.333, 3.167, 3.0, 2.833, 2.667, 2.5, 2.333, 2.167, 2.0, 1.833, 1.667, 1.5, 1.333],
-    projectile_speed_scheme=[900]*13,
+    projectile_speed_scheme=[1200]*13,
     damage_scheme=[25 + i*5 for i in range(1, 14)],
     freeze_scheme=None,
     recoil_scheme=None,
