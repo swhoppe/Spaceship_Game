@@ -200,7 +200,7 @@ class Weapon(Component):
 class LightningGun(Weapon):
     def __init__(self, config, move_pattern, impact_sprite):
         super().__init__(config, move_pattern, impact_sprite)
-        self.proj_duration = 0.5
+        self.proj_duration = 0.8
 
     def shoot(self, start_location, parent):
         new_projectile =  LightningProjectile(self.proj_img, start_location, self.proj_move_pattern, self.proj_speed, self.damage, self.impact_sprite_img, self.impact, self.detonable, parent, self.proj_duration)
@@ -321,7 +321,7 @@ lightning_config = WeaponConfig(
     proj_image=lightning_sheet,
     reload_time_scheme=[4]*13,
     projectile_speed_scheme=[0]*13,
-    damage_scheme=[20 + i*10 for i in range(1, 14)],
+    damage_scheme=[20 + i*10 for i in range(13)],
     freeze_scheme=[0.5]*13,
     recoil_scheme=None,
     impact_radius_scheme=None,

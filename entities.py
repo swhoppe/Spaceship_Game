@@ -369,6 +369,7 @@ class LightningProjectile(Projectile):
                 if enemy.mask.overlap(self.mask, (self.rect[0] - enemy.rect[0], self.rect[1] - enemy.rect[1])):
                     self.hit_enemies.add(enemy)
                     enemy.hp -= self.damage
+                    print(f"hit {enemy.name}, hp now {enemy.hp}, projectiles alive: {len(projectiles)}")
                     self.parent.credits += self.damage
                     if enemy.hp <= 0:
                         self.parent.credits += enemy.kill_bonus
