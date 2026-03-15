@@ -191,10 +191,22 @@ class Weapon(Component):
         projectiles.add(new_projectile)
         if self.recoil:
             self.recoil.apply(parent)
+        self.reload_timer = 0
 
     def set_level(self, level):
         self.upgrade_level = level
         self.update()
+
+class LightningGun(Weapon):
+    def __init__(self, config, move_pattern, impact_sprite):
+        super().__init__(config, move_pattern, impact_sprite)
+        self.proj_duration = 0.5
+
+    def shoot(self, start_location, parent):
+        new_projectile =  LightningProjectile(self.proj_img, start_location, self.proj_move_pattern, self.proj_speed, self.damage, self.impact_sprite_img, self.impact, self.detonable, parent, self.proj_duration)
+        new_projectile.freeze = self.freeze
+        projectiles.add(new_projectile)
+        self.reload_timer = 0
 
 bolt_laser_config = WeaponConfig(
     name='BOLT LASER',
@@ -302,6 +314,22 @@ rockets_config = WeaponConfig(
     detonable=True
 )
 
+lightning_config = WeaponConfig(
+    name='LIGHTNING GUN',
+    icon=None,
+    upgrade_costs=[1000 + i*500 for i in range(12)],
+    proj_image=lightning_sheet,
+    reload_time_scheme=[4]*13,
+    projectile_speed_scheme=[0]*13,
+    damage_scheme=[20 + i*10 for i in range(1, 14)],
+    freeze_scheme=[0.5]*13,
+    recoil_scheme=None,
+    impact_radius_scheme=None,
+    impact_magnitude_scheme=None,
+    detonable=False
+)
+
+
 def create_weapon_list():
     """Creates a fresh set of weapons for a player"""
     return np.array([
@@ -311,7 +339,8 @@ def create_weapon_list():
         Weapon(beam_laser_config, TrackParent(), None),
         Weapon(ice_ray_config, TrackParent(), None),
         Weapon(mine_launcher_config, ConstX(), None),
-        Weapon(rockets_config, GuidedMissile(), None)
+        Weapon(rockets_config, GuidedMissile(), None),
+        LightningGun(lightning_config, ConstX(), None)
     ])
 
 enemy_laser_config = WeaponConfig(

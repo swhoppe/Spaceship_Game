@@ -111,7 +111,7 @@ class Player(pygame.sprite.Sprite):
                 weapon.reload_timer += dt
             if weapon.reload_bar:
                 weapon.reload_bar.update(weapon.reload_time, weapon.reload_timer)
-                weapon.reload_bar.rect.y = self.rect.y + (index * 5)
+                weapon.reload_bar.rect.y = self.rect.y + (7+ index * 7)
                 weapon.reload_bar.rect.x = self.rect.centerx - weapon.reload_bar.rect.width/2
 
         self.hp_bar.level = self.hp
@@ -152,7 +152,6 @@ class Player(pygame.sprite.Sprite):
         weapon = self.weapon_list[weapon_index]
         if weapon.reload_timer >= weapon.reload_time:  
             weapon.shoot(self.rect.center, self)
-            weapon.reload_timer = 0
 
     def reset_for_level(self, position):
         self.hp = self.max_hp
@@ -269,6 +268,7 @@ class Projectile(pygame.sprite.Sprite):
         self.impact = impact
         self.detonable = detonable
         self.detonated = False
+        self.has_hit = False
         self.move_pattern.init_state(self)
     
     def hit(self, struck_target=None):
@@ -289,7 +289,6 @@ class Projectile(pygame.sprite.Sprite):
         if self.impact_sprite != None:
             effects.add(self.impact_sprite(self.rect.center, self.freeze))
         
-        self.kill()
 
     def update(self, boundary, dt):
         # motion
@@ -308,6 +307,7 @@ class Projectile(pygame.sprite.Sprite):
         if isinstance(self.parent, Player):
             for enemy in enemies:        
                 if enemy.mask.overlap(self.mask, (self.rect[0] - enemy.rect[0], self.rect[1] - enemy.rect[1])):
+                    self.has_hit = True
                     enemy.hp -= self.damage
                     self.parent.credits += self.damage
                     if enemy.hp <= 0:
@@ -315,6 +315,9 @@ class Projectile(pygame.sprite.Sprite):
                     if self.freeze != None:
                         enemy.freeze_timer = self.freeze
                     self.hit(enemy)
+            
+            if self.detonated or self.has_hit:
+                self.kill()
     
         if isinstance(self.parent, Enemy):
             for player in players['active']:
@@ -333,6 +336,47 @@ class Projectile(pygame.sprite.Sprite):
             surface.blit(self.rotated_image, self.rect)
         else:
             surface.blit(self.image, self.rect)
+            
+class LightningProjectile(Projectile):
+    def __init__(self, image, start_location, move_pattern, speed, damage, impact_sprite_img, impact, detonable, parent, duration):
+        super().__init__(image, start_location, move_pattern, speed, damage, impact_sprite_img, impact, detonable, parent)
+        self.duration = duration
+        self.hit_enemies = set()
+        self.surface = pygame.Surface((1536, 512), pygame.SRCALPHA)
+        self.rect = self.surface.get_rect()
+        self.rect.midleft = start_location
+        self.anim_frame = 0
+        self.anim_timer = 0
+        self.frame_duration = 0.08
+
+    def update(self, boundary, dt):
+        self.duration -= dt
+        self.surface.fill((0, 0, 0, 0))
+        self.surface.blit(self.image, (- self.anim_frame * 1536, 0))
+        self.mask = pygame.mask.from_surface(self.surface)
+
+        self.anim_timer += dt
+        if self.anim_timer >= self.frame_duration:
+            self.anim_frame = (self.anim_frame + 1) % 5
+            self.anim_timer = 0
+
+        if self.duration <= 0:
+            self.kill()
+            return
+        
+        for enemy in enemies:
+            if enemy not in self.hit_enemies:
+                if enemy.mask.overlap(self.mask, (self.rect[0] - enemy.rect[0], self.rect[1] - enemy.rect[1])):
+                    self.hit_enemies.add(enemy)
+                    enemy.hp -= self.damage
+                    self.parent.credits += self.damage
+                    if enemy.hp <= 0:
+                        self.parent.credits += enemy.kill_bonus
+                    if self.freeze != None:
+                        enemy.freeze_timer = self.freeze
+    
+    def draw(self, surface):
+        surface.blit(self.surface, self.rect)
 
 class EffectSprite(pygame.sprite.Sprite):
     def __init__(self, image, start_location, duration):
