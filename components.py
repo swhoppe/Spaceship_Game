@@ -333,14 +333,14 @@ lightning_config = WeaponConfig(
 def create_weapon_list():
     """Creates a fresh set of weapons for a player"""
     return np.array([
-        Weapon(bolt_laser_config, ConstX(), None),
-        Weapon(gum_blaster_config, ConstX(), create_gum_splat),
-        Weapon(lava_blaster_config, ConstX(), create_lava_splat),
-        Weapon(beam_laser_config, TrackParent(), None),
-        Weapon(ice_ray_config, TrackParent(), None),
-        Weapon(mine_launcher_config, ConstX(), None),
-        Weapon(rockets_config, GuidedMissile(), None),
-        LightningGun(lightning_config, ConstX(), None)
+        Weapon(bolt_laser_config, constX, None),
+        Weapon(gum_blaster_config, constX, create_gum_splat),
+        Weapon(lava_blaster_config, constX, create_lava_splat),
+        Weapon(beam_laser_config, track_parent, None),
+        Weapon(ice_ray_config, track_parent, None),
+        Weapon(mine_launcher_config, constX, None),
+        Weapon(rockets_config, guided_missile, None),
+        LightningGun(lightning_config, constX, None)
     ])
 
 enemy_laser_config = WeaponConfig(
@@ -359,6 +359,6 @@ enemy_laser_config = WeaponConfig(
 )
 
 #enemy
-enemy_laser_template = Weapon(enemy_laser_config, ConstX(), None)
-enemy_fast_laser_template = Weapon(enemy_laser_config, ConstX(), None)
+enemy_laser_template = Weapon(enemy_laser_config, constX, None)
+enemy_fast_laser_template = Weapon(enemy_laser_config, constX, None)
 enemy_fast_laser_template.set_level(10)

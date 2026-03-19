@@ -17,3 +17,8 @@ def draw_multiline_text(surface, font, text, color, x, y):
         draw_text(surface, font, line, color, x, y+y_offset)
         y_offset += font.get_linesize()
     return y_offset
+
+def rotation(angle):
+    theta = np.radians(angle)
+    c, s = np.cos(theta), np.sin(theta)
+    return np.array(((c, -s), (s, c)))

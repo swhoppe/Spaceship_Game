@@ -171,7 +171,7 @@ class Player(pygame.sprite.Sprite):
         self.active_submenu = self.active_submenu.prev_state
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, group, name, image, start_hp, start_position, speed, move_pattern, weapon):
+    def __init__(self, group, name, image, start_hp, start_position, speed, move_pattern, weapon, start_move_packs=None):
         super().__init__(group)
         self.name = name
         self.image = image
@@ -193,17 +193,24 @@ class Enemy(pygame.sprite.Sprite):
         self.weapon = weapon
         self.tof = 0 # time of flight
         self.move_packs = []
+        if start_move_packs:
+            for pack in start_move_packs:
+                self.move_packs.append(pack)
+                pack.parent = self
 
     def freeze(self, time):
         self.freeze_timer = time
     
     def update(self, boundary, dt):
-        self.input_velocity = self.move_pattern(self).astype(float)
+        self.input_velocity = np.zeros(2)
+        if self.move_pattern:
+            self.input_velocity = self.move_pattern(self).astype(float)
+            
         self.velocity = self.input_velocity.copy()
 
         if len(self.move_packs) > 0:
-            for pack in self.move_packs[:]:
-                self.velocity += pack.update(dt) * ((100 / self.max_hp)**0.5)
+            for pack in self.move_packs[:]: #iterate over copy of list so i don't mutate the list while iterating
+                self.velocity += pack.update(dt)
                 if not pack.active:
                     self.move_packs.remove(pack)
 
@@ -218,8 +225,10 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.bottom = GAME_HEIGHT
 
         if self.hp <=0:
+            print('enemy kill')
             self.kill()
         if self.rect.x < 0 - self.rect.width:
+            print('enemy off screen left')
             self.kill()
         
         for player in players['active']:

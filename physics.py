@@ -1,6 +1,8 @@
 import numpy as np
 import math
 from groups import *
+from entities import *
+from utils import *
 
 class MovePattern:
     def __init__(self):
@@ -62,31 +64,91 @@ class GuidedMissile(MovePattern):
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
 crazy_sine = SinePattern(8, 3)
+constX = ConstX()
+track_parent = TrackParent()
+guided_missile = GuidedMissile()
 
 ### move_packs ###
 
 class MovePack:
     def __init__(self):
-        pass
+        self.active = True
+        self.tof = 0
+        self.parent = None
 
     def update(self, dt):
-        pass
+        self.tof += dt
 
 class Impulse(MovePack):
     def __init__(self, vector, magnitude):
         super().__init__()
-        self.transient = True
-        self.active = True
         self.vector = vector * magnitude
     
     def update(self, dt):
-        output = self.vector.astype(float)
+        output = self.vector.astype(float) * ((100 / self.parent.max_hp)**0.5)
         self.vector = self.vector * (0.85**(dt*60)) # decay by multiple of 0.85 every 1/60th of a second
         if np.linalg.norm(self.vector) < 0.0001:
             self.active = False
         return output
     
+class Park(MovePack):
+    def __init__(self, x_pos):
+        super().__init__()
+        self.x_pos = x_pos
+
+    def update(self, dt):
+        if self.parent.rect.x >= self.x_pos:
+            return constX(self.parent)
+        else:
+            self.active = False
+            return np.zeros(2)
+        
+class DelayedPattern(MovePack):
+    def __init__(self, pattern, delay):
+        super().__init__()
+        self.pattern = pattern
+        self.delay = delay
+
+    def update(self, dt):
+        self.tof += dt
+        if self.tof < self.delay:
+            return np.zeros(2)
+        else:
+            return constX(self.parent)
+        
+class AvoidProjectile(MovePack):
+    def __init__(self, radius, speed):
+        super().__init__()
+        self.radius = radius
+        self.speed = speed
+    
+    def update(self, dt):
+        vector = np.zeros(2)
+        for projectile in projectiles:
+            if isinstance(projectile.parent, Player):
+                to_self = np.array(self.parent.rect.center) - np.array(projectile.rect.center)
+                distance = np.linalg.norm(to_self)
+                to_self_normed = to_self / (distance + 0.0001)
+                if distance <= self.radius:
+                    proj_vel_normed = projectile.velocity/(np.linalg.norm(projectile.velocity)+0.0001)
+                    motivation = max(0, np.dot(to_self_normed, proj_vel_normed))
+                    flee_vector = to_self_normed - np.dot(to_self_normed, proj_vel_normed)*proj_vel_normed
+                    flee_norm = np.linalg.norm(flee_vector)
+                    if flee_norm > 0.001:
+                        flee_vector_normed = flee_vector / (flee_norm + 0.00001)
+                    else:
+                        flee_vector_normed = np.array([-proj_vel_normed[1], proj_vel_normed[0]])
+                    proximity_scale = 1 - distance / self.radius
+                    vector += flee_vector_normed * motivation * proximity_scale
+        output = vector / (np.linalg.norm(vector)+0.00001) * self.speed
+        if np.linalg.norm(output) > 0.01:
+            print(output)
+        return output
+
+# MovePack Appliers    
+
 def apply_move_pack(move_pack, target):
+    move_pack.parent = target
     target.move_packs.append(move_pack)    
 
 class Recoil:
