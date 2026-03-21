@@ -181,7 +181,7 @@ class Enemy(pygame.sprite.Sprite):
         self.x = float(self.start_position[0])
         self.rect.center = self.start_position
         self.move_pattern = move_pattern
-        self.speed = -speed
+        self.speed = speed
         self.input_velocity = None
         self.velocity = np.array([0.0, 0.0])
         self.freeze_timer = 0

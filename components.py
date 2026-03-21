@@ -333,14 +333,14 @@ lightning_config = WeaponConfig(
 def create_weapon_list():
     """Creates a fresh set of weapons for a player"""
     return np.array([
-        Weapon(bolt_laser_config, constX, None),
-        Weapon(gum_blaster_config, constX, create_gum_splat),
-        Weapon(lava_blaster_config, constX, create_lava_splat),
+        Weapon(bolt_laser_config, const_right, None),
+        Weapon(gum_blaster_config, const_right, create_gum_splat),
+        Weapon(lava_blaster_config, const_right, create_lava_splat),
         Weapon(beam_laser_config, track_parent, None),
         Weapon(ice_ray_config, track_parent, None),
-        Weapon(mine_launcher_config, constX, None),
+        Weapon(mine_launcher_config, const_right, None),
         Weapon(rockets_config, guided_missile, None),
-        LightningGun(lightning_config, constX, None)
+        LightningGun(lightning_config, const_right, None)
     ])
 
 enemy_laser_config = WeaponConfig(
@@ -349,7 +349,7 @@ enemy_laser_config = WeaponConfig(
     upgrade_costs=[500, 500, 750, 750, 1000, 1000, 1250, 1250, 1500, 1500, 2000, 3000],
     proj_image=enemy_laser_bolt_img,
     reload_time_scheme=[1.5 - i*0.1 for i in range(13)],
-    projectile_speed_scheme=[-x for x in [900, 900, 900, 900, 960, 960, 960, 1020, 1020, 1020, 1080, 1080, 1080]],
+    projectile_speed_scheme=[900, 900, 900, 900, 960, 960, 960, 1020, 1020, 1020, 1080, 1080, 1080],
     damage_scheme=[10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 15],
     freeze_scheme=None,
     recoil_scheme=None,
@@ -359,6 +359,6 @@ enemy_laser_config = WeaponConfig(
 )
 
 #enemy
-enemy_laser_template = Weapon(enemy_laser_config, constX, None)
-enemy_fast_laser_template = Weapon(enemy_laser_config, constX, None)
+enemy_laser_template = Weapon(enemy_laser_config, const_left, None)
+enemy_fast_laser_template = Weapon(enemy_laser_config, const_left, None)
 enemy_fast_laser_template.set_level(10)

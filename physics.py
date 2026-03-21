@@ -23,12 +23,13 @@ class SinePattern(MovePattern):
     def __call__(self, obj):
         return np.array([obj.speed, (self.amplitude * math.sin((obj.tof * self.rate)+math.pi/2))])
 
-class ConstX(MovePattern):
-    def __init__(self):
+class Constant(MovePattern):
+    def __init__(self, direction):
         super().__init__()
+        self.vector = np.array(direction)
 
     def __call__(self, obj):
-        return np.array([obj.speed, 0])
+        return np.array(self.vector) * obj.speed
     
 class TrackParent(MovePattern):
     def __init__(self):
@@ -64,7 +65,8 @@ class GuidedMissile(MovePattern):
 sine_pattern = SinePattern(5, 2)
 gentle_sine = SinePattern(2, 2)
 crazy_sine = SinePattern(8, 3)
-constX = ConstX()
+const_left = Constant((-1, 0))
+const_right = Constant((1, 0))
 track_parent = TrackParent()
 guided_missile = GuidedMissile()
 
@@ -98,12 +100,12 @@ class Park(MovePack):
 
     def update(self, dt):
         if self.parent.rect.x >= self.x_pos:
-            return constX(self.parent)
+            return const_left(self.parent)
         else:
             self.active = False
             return np.zeros(2)
         
-class DelayedPattern(MovePack):
+class DelayedPattern(MovePack): # uses a MovePattern objects __call__ after a given delay
     def __init__(self, pattern, delay):
         super().__init__()
         self.pattern = pattern
@@ -114,8 +116,36 @@ class DelayedPattern(MovePack):
         if self.tof < self.delay:
             return np.zeros(2)
         else:
-            return constX(self.parent)
+            return const_left(self.parent)
         
+class Rush(MovePack):
+    def __init__(self, delay):
+        super().__init__()
+        self.delay = delay
+        self.move_dict = {'rush': const_left, 'retreat': const_right}
+        self.status = 'idle'
+
+    def update(self, dt):
+        self.tof += dt
+        if self.tof < self.delay:
+            return np.zeros(2)
+        if self.status ==  'idle' and self.tof >= self.delay:
+            self.status = 'rush'
+            return self.move_dict[self.status](self.parent)
+        if self.status == 'rush' and self.parent.rect.left > 100:
+            return self.move_dict[self.status](self.parent)
+        if self.status == 'rush' and self.parent.rect.left <= 100:
+            self.status = 'retreat'
+            return self.move_dict[self.status](self.parent)
+        if self.status == 'retreat' and self.parent.rect.right < GAME_WIDTH - 150:
+            return self.move_dict[self.status](self.parent)
+        if self.status == 'retreat' and self.parent.rect.right >= GAME_WIDTH - 150:
+            self.status = 'complete'
+            return np.zeros(2)
+        if self.status == 'complete':
+            self.active = False
+            return np.zeros(2)
+            
 class AvoidProjectile(MovePack):
     def __init__(self, radius, speed):
         super().__init__()
@@ -141,9 +171,24 @@ class AvoidProjectile(MovePack):
                     proximity_scale = 1 - distance / self.radius
                     vector += flee_vector_normed * motivation * proximity_scale
         output = vector / (np.linalg.norm(vector)+0.00001) * self.speed
-        if np.linalg.norm(output) > 0.01:
-            print(output)
         return output
+    
+class SeekNearestPlayer(MovePack):
+    def __init__(self):
+        super().__init__()
+        distances = {}
+
+    def update(self, dt):
+        if not players['active']:
+            return np.zeros(2)
+        distances = {}
+        vectors = {player: np.array(player.rect.center) - np.array(self.parent.rect.center)
+                   for player in players['active']}
+        closest_player = min(vectors, key=lambda p: np.linalg.norm(vectors[p]))
+        to_closest = vectors[closest_player]
+        to_closest_normed = to_closest / (np.linalg.norm(to_closest) + 0.0001)
+        print(self.parent.rect.center)
+        return to_closest_normed * self.parent.speed
 
 # MovePack Appliers    
 

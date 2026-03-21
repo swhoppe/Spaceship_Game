@@ -50,6 +50,7 @@ armor_icon_0 = load_image("images/armor_icon_0.png", (256, 256))
 saucer_1_img = load_image("images/saucer_1.png", (128, 128))
 saucer_1_big_img = load_image("images/saucer_1.png", (256, 256))
 saucer_1_mini_img = load_image("images/saucer_1.png", (64, 64))
+saucer_mini_red_img = load_image("images/saucer_2.png", (64, 64))
 saucer_2_img = load_image("images/saucer_2.png", (128, 128))
 saucer_2_boss_img = load_image("images/saucer_2.png", (512, 512))
 
