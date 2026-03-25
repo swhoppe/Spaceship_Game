@@ -67,6 +67,8 @@ gentle_sine = SinePattern(2, 2)
 crazy_sine = SinePattern(8, 3)
 const_left = Constant((-1, 0))
 const_right = Constant((1, 0))
+const_up = Constant((0, -1))
+const_down = Constant((0, 1))
 track_parent = TrackParent()
 guided_missile = GuidedMissile()
 
@@ -81,7 +83,7 @@ class MovePack:
         self.to_start = None
         self.to_stop = None
         self.on_stop = None
-        self.output = None
+        self.output = np.zeros(2)
 
     def update(self, dt):
         self.tof += dt
@@ -112,7 +114,7 @@ class Impulse(MovePack):
         self.output = self.vector.astype(float) * ((100 / self.parent.max_hp)**0.5)
         self.vector = self.vector * (0.85**(dt*60)) # decay by multiple of 0.85 every 1/60th of a second
         if np.linalg.norm(self.vector) < 0.0001:
-            self.stop()
+            self.complete = True
     
 class Delay(MovePack):
     def __init__(self, delay, on_stop, active=False):
@@ -134,10 +136,8 @@ class MoveLeftTo(MovePack):
         self.x_stop = x_stop
         self.to_start = to_start
         self.on_stop = on_stop
-        self.last_pos = None
 
     def update(self, dt):
-        # print(self.parent.rect.center)
         if self.parent.rect.left > self.x_stop:
             self.output = const_left(self.parent)
         else:
@@ -149,17 +149,47 @@ class MoveRightTo(MovePack):
         self.x_stop = x_stop
         self.to_start = to_start
         self.on_stop = on_stop
-        self.last_pos = None
 
     def update(self, dt):
-        # print(self.parent.rect.center)
-        if self.parent.rect.left < self.x_stop:
+        if self.parent.rect.right < self.x_stop:
             self.output = const_right(self.parent)
         else:
             self.stop()
 
+class MoveUpTo(MovePack):
+    def __init__(self, y_stop, to_start, on_stop, active=True):
+        super().__init__(active)
+        self.y_stop = y_stop
+        self.to_start = to_start
+        self.on_stop = on_stop
+
+    def update(self, dt):
+        if self.parent.rect.top > self.y_stop:
+            self.output = const_up(self.parent)
+        else:
+            self.stop()
+
+class MoveDownTo(MovePack):
+    def __init__(self, y_stop, to_start, on_stop, active=True):
+        super().__init__(active)
+        self.y_stop = y_stop
+        self.to_start = to_start
+        self.on_stop = on_stop
+
+    def update(self, dt):
+        if self.parent.rect.bottom < self.y_stop:
+            self.output = const_down(self.parent)
+            print(self.output)
+        else:
+            self.stop()
+
 back_and_forth = [MoveLeftTo((GAME_WIDTH/3), 0, 1), MoveRightTo((2*GAME_WIDTH/3), 1, 0, active=False)]
-    
+square_path = [
+    MoveLeftTo(600, 0, 1),
+    MoveDownTo(600, 1, 2, active=False),
+    MoveRightTo(900, 2, 3, active=False),
+    MoveUpTo(200, 3, 0, active=False)]
+
 class Park(MovePack):
     def __init__(self, x_pos):
         super().__init__()
@@ -246,12 +276,13 @@ class SeekNearestPlayer(MovePack):
     def update(self, dt):
         if not players['active']:
             self.output = np.zeros(2)
-        vectors = {player: np.array(player.rect.center) - np.array(self.parent.rect.center)
-                   for player in players['active']}
-        closest_player = min(vectors, key=lambda p: np.linalg.norm(vectors[p]))
-        to_closest = vectors[closest_player]
-        to_closest_normed = to_closest / (np.linalg.norm(to_closest) + 0.0001)
-        self.output = to_closest_normed * self.parent.speed
+        else:
+            vectors = {player: np.array(player.rect.center) - np.array(self.parent.rect.center)
+                    for player in players['active']}
+            closest_player = min(vectors, key=lambda p: np.linalg.norm(vectors[p]))
+            to_closest = vectors[closest_player]
+            to_closest_normed = to_closest / (np.linalg.norm(to_closest) + 0.0001)
+            self.output = to_closest_normed * self.parent.speed
 
 # MovePack Appliers    
 

@@ -211,11 +211,11 @@ class Enemy(pygame.sprite.Sprite):
         self.velocity = self.input_velocity.copy()
 
         # process move_pack signals 
-        for signal in self.move_signals.copy():
-            print(f'signal: {signal}')
+        for signal in self.move_signals:
+            print(f'enemy has received signal from movepack. signal: {signal}')
             for pack in self.move_packs:
                 pack.read_signal(signal)
-            self.move_signals.remove(signal)
+        self.move_signals.clear()
 
         # update & read move_packs
         if len(self.move_packs) > 0:
