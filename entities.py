@@ -97,7 +97,8 @@ class Player(pygame.sprite.Sprite):
 
         if len(self.move_packs) > 0:
             for pack in self.move_packs[:]:
-                self.velocity += pack.update(dt)
+                pack.update(dt)
+                self.velocity += pack.output
                 if not pack.active:
                     self.move_packs.remove(pack)
 
@@ -197,6 +198,7 @@ class Enemy(pygame.sprite.Sprite):
             for pack in start_move_packs:
                 self.move_packs.append(pack)
                 pack.parent = self
+        self.move_signals = set()
 
     def freeze(self, time):
         self.freeze_timer = time
@@ -208,10 +210,20 @@ class Enemy(pygame.sprite.Sprite):
             
         self.velocity = self.input_velocity.copy()
 
+        # process move_pack signals 
+        for signal in self.move_signals.copy():
+            print(f'signal: {signal}')
+            for pack in self.move_packs:
+                pack.read_signal(signal)
+            self.move_signals.remove(signal)
+
+        # update & read move_packs
         if len(self.move_packs) > 0:
             for pack in self.move_packs[:]: #iterate over copy of list so i don't mutate the list while iterating
-                self.velocity += pack.update(dt)
-                if not pack.active:
+                if pack.active == True:
+                    pack.update(dt)
+                    self.velocity += pack.output
+                if pack.complete:
                     self.move_packs.remove(pack)
 
         if self.freeze_timer > 0:
@@ -378,7 +390,6 @@ class LightningProjectile(Projectile):
                 if enemy.mask.overlap(self.mask, (self.rect[0] - enemy.rect[0], self.rect[1] - enemy.rect[1])):
                     self.hit_enemies.add(enemy)
                     enemy.hp -= self.damage
-                    print(f"hit {enemy.name}, hp now {enemy.hp}, projectiles alive: {len(projectiles)}")
                     self.parent.credits += self.damage
                     if enemy.hp <= 0:
                         self.parent.credits += enemy.kill_bonus

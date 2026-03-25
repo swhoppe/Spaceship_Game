@@ -106,11 +106,12 @@ tenth = GAME_HEIGHT/10
 
 level_1_seq = {
     # Original solo spawns, but minis start appearing to harass
-0.0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 180, None, [Park(1280), DelayedPattern(const_left, 12), AvoidProjectile(150, 250)]),
+# 0.0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 2), 180, None, [Park(1280), DelayedPattern(const_left, 12), AvoidProjectile(150, 250)]),
 1.0: CommandGroup(
-        SpawnCommand(mini_red, (GAME_WIDTH + 128, tenth*2), 300, None, [SeekNearestPlayer()]),
-        SpawnCommand(mini_red, (GAME_WIDTH + 128, tenth*8), 300, None, [SeekNearestPlayer()])),
-2.0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 4), 400, None, [Park(1280), Rush(5)]),
+        # SpawnCommand(mini_red, (GAME_WIDTH + 128, tenth*2), 300, None, [SeekNearestPlayer()]),
+        # SpawnCommand(mini_red, (GAME_WIDTH + 128, tenth*8), 300, None, [SeekNearestPlayer()]),
+        SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, 3* GAME_HEIGHT / 5), 180, None, back_and_forth)),
+# 2.0: SpawnCommand(shooting_saucer, (GAME_WIDTH + 128, GAME_HEIGHT / 4), 400, None, [Park(1280), Rush(5)]),
 # 4.0: CommandGroup(
 #         SpawnCommand(basic_saucer, (GAME_WIDTH + 128, tenth*3), 180, sine_pattern),
 #         SpawnCommand(mini_saucer, (GAME_WIDTH + 128, tenth*3), 300, crazy_sine)),

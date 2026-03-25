@@ -1,6 +1,6 @@
 # game size
-GAME_WIDTH = 1280*1.5
-GAME_HEIGHT = 720*1.5
+GAME_WIDTH = 1280*1
+GAME_HEIGHT = 720*1
 SCALE_FACTOR = 1
 
 # deadzones and margins
@@ -15,3 +15,4 @@ FRAMERATE_SET = 60
 # ui
 BUTTON_SIZE = (200, 50)
 BUTTON_COLORS = {'selected': (0, 255, 0), 'deselected': (50, 50, 50)}
+
