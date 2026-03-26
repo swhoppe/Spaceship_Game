@@ -1,6 +1,6 @@
 # game size
-GAME_WIDTH = 1280*1
-GAME_HEIGHT = 720*1
+GAME_WIDTH = 1280*1.5
+GAME_HEIGHT = 720*1.5
 SCALE_FACTOR = 1
 
 # deadzones and margins

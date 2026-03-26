@@ -179,16 +179,46 @@ class MoveDownTo(MovePack):
     def update(self, dt):
         if self.parent.rect.bottom < self.y_stop:
             self.output = const_down(self.parent)
-            print(self.output)
         else:
             self.stop()
 
-back_and_forth = [MoveLeftTo((GAME_WIDTH/3), 0, 1), MoveRightTo((2*GAME_WIDTH/3), 1, 0, active=False)]
-square_path = [
+class MoveLeftFor(MovePack):
+    def __init__(self, x_dist, to_start, on_stop, active=True):
+        super().__init__(active)
+        self.x_dist = x_dist
+        self.to_start = to_start
+        self.on_stop = on_stop
+        self.start_x = 0.0
+
+    def update(self, dt):
+        if self.parent.rect.left > self.start_x - self.x_dist:
+            self.output = const_left(self.parent)
+        else:
+            self.stop()
+    
+    def start(self):
+        self.start_x = self.parent.rect.left
+        self.active = True
+
+# enemy movement programs
+def back_and_forth():
+    return [MoveLeftTo((GAME_WIDTH/3), 0, 1),
+            MoveRightTo((2*GAME_WIDTH/3), 1, 0, active=False)]
+def square_path():
+    return [
     MoveLeftTo(600, 0, 1),
     MoveDownTo(600, 1, 2, active=False),
     MoveRightTo(900, 2, 3, active=False),
     MoveUpTo(200, 3, 0, active=False)]
+
+def caterpillar_movement(delay):
+    return [
+        Delay(delay, 0, active=True),
+        MoveLeftTo(GAME_WIDTH-100, 0, 1, active=False),
+        MoveUpTo(0, 1, 2, active=False),
+        MoveLeftFor(128, 2, 3, active=False),
+        MoveDownTo(GAME_HEIGHT, 3, 4, active=False),
+        MoveLeftFor(128, 4, 1, active=False)]
 
 class Park(MovePack):
     def __init__(self, x_pos):
