@@ -223,7 +223,7 @@ class Enemy(pygame.sprite.Sprite):
                 if pack.active == True:
                     pack.update(dt)
                     self.velocity += pack.output
-                if pack.complete:
+                if pack.expired:
                     self.move_packs.remove(pack)
 
         if self.freeze_timer > 0:
