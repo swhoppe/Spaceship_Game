@@ -21,7 +21,7 @@ class SinePattern(MovePattern):
         self.rate = rate
 
     def __call__(self, obj):
-        return np.array([-obj.speed, (self.amplitude * math.sin((obj.tof * self.rate)+math.pi/2))])
+        return np.array([0, (self.amplitude * math.sin((obj.tof * self.rate)+math.pi/2))])
 
 class Constant(MovePattern):
     def __init__(self, direction):
