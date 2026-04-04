@@ -109,6 +109,7 @@ class MovePack:
 
     def deactivate(self):
         self.active = False
+        self.output = np.zeros(2)
     
     def complete(self):
         self.output = np.zeros(2)
