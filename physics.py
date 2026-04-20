@@ -145,7 +145,7 @@ class Delay(MovePack):
             self.complete()
 
 class MoveLeftTo(MovePack):
-    def __init__(self, x_stop, activates_on, deactivates_on, emits, active=True):
+    def __init__(self, x_stop, activates_on=None, deactivates_on=None, emits=None, active=True):
         super().__init__(active)
         self.x_stop = x_stop
         self.activates_on = _as_set(activates_on)
@@ -155,6 +155,20 @@ class MoveLeftTo(MovePack):
     def update(self, dt):
         if self.parent.rect.left > self.x_stop:
             self.output = const_left(self.parent)
+        else:
+            self.complete()
+
+class ZipLeftTo(MovePack):
+    def __init__(self, x_stop, activates_on=None, deactivates_on=None, emits=None, active=True):
+        super().__init__(active)
+        self.x_stop = x_stop
+        self.activates_on = _as_set(activates_on)
+        self.deactivates_on = _as_set(deactivates_on)
+        self.emits = _as_set(emits)
+
+    def update(self, dt):
+        if self.parent.rect.left > self.x_stop:
+            self.output = np.array((-1000, 0))
         else:
             self.complete()
 
@@ -173,7 +187,7 @@ class MoveRightTo(MovePack):
             self.complete()
 
 class MoveUpTo(MovePack):
-    def __init__(self, y_stop, activates_on, deactivates_on, emits, active=True):
+    def __init__(self, y_stop, activates_on, deactivates_on=None, emits=None, active=True):
         super().__init__(active)
         self.y_stop = y_stop
         self.activates_on = _as_set(activates_on)
@@ -187,7 +201,7 @@ class MoveUpTo(MovePack):
             self.complete()
 
 class MoveDownTo(MovePack):
-    def __init__(self, y_stop, activates_on, deactivates_on, emits, active=True):
+    def __init__(self, y_stop, activates_on, deactivates_on=None, emits=None, active=True):
         super().__init__(active)
         self.y_stop = y_stop
         self.activates_on = _as_set(activates_on)
@@ -219,10 +233,11 @@ class MoveLeftFor(MovePack):
         self.start_x = self.parent.rect.left
         self.active = True
 
-# enemy movement programs
+# enemy movement behaviors
 def back_and_forth():
     return [MoveLeftTo((GAME_WIDTH/3), 0, None, 1),
             MoveRightTo((2*GAME_WIDTH/3), 1, None, 0, active=False)]
+
 def square_path():
     return [
     MoveLeftTo(600, 0, None, 1),
@@ -333,3 +348,11 @@ class Impact:
         distance = np.linalg.norm(vector)
         if distance < self.radius:
             target.hit()
+
+# bundled behaviors
+park_then_dodge = [MoveLeftTo(MID_WD, active=True),
+                   AvoidProjectile(200, 300)]
+up_down_dodge = [MoveLeftTo(MID_WD, emits=0, active=True),
+                 MoveUpTo(0, activates_on=0, emits=1, active=False),
+                 MoveDownTo(GAME_HEIGHT, activates_on=1, emits=0, active=False),
+                    AvoidProjectile(200, 300)]

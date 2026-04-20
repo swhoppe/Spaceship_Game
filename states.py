@@ -307,9 +307,9 @@ class GamePlay(State):
         super().__init__()
         self.next_state = 'upgrade_menu'
         self.level = None
-        self.level_timer = None
-        self.star_motion_timer = 0
+        self.sequencer = WaveSequencer()
 
+        self.star_motion_timer = 0
         # star motion speed
         self.near_speed = 60 # pixels per second
         self.mid_speed = 30
@@ -317,7 +317,8 @@ class GamePlay(State):
     
     def reset(self, boundary):
         self.level = game_levels.pop(0)
-        self.level.reset()
+        self.sequencer.load(self.level)
+
         self.level_timer = 0
         self.boundary = boundary
         
@@ -352,9 +353,7 @@ class GamePlay(State):
                     player.shoot(player.active_weapon_indices[1])
     
     def update(self, dt):
-        self.level_timer += dt
-
-        self.level.update(self.level_timer)
+        self.sequencer.update(dt)
         players['active'].update(self.boundary, dt)
         projectiles.update(self.boundary, dt)
         enemies.update(self.boundary, dt)
@@ -363,11 +362,11 @@ class GamePlay(State):
         self.star_motion_timer += dt
 
         if not players['active']:
-            game_levels.insert(0, self.level)
+            self.sequencer.load(self.level)
             self.clear()
             self.over = True
 
-        if self.level.over:
+        if self.sequencer.complete:
             if not enemies:
                 self.clear()
                 self.over = True

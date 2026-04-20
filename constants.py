@@ -9,6 +9,11 @@ AIM_DEADZONE = 0.1
 SHOOT_DEADZONE = 0.1
 BOUNDARY_MARGIN = 256
 
+# easy-access dimensions
+SPAWN_X = GAME_WIDTH + 100
+MID_HT = GAME_HEIGHT // 2
+MID_WD = GAME_WIDTH //2
+
 # framerate
 FRAMERATE_SET = 60
 
