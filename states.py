@@ -43,7 +43,18 @@ class Splash(State):
             self.over = True
 
     def draw(self, surface):
+        surface.fill((0, 0, 0))
         draw_text(surface, font_lg, 'spaceship game', (255, 255, 255), GAME_WIDTH//2, GAME_HEIGHT//2)
+
+class LevelSplash(Splash):
+    def __init__(self):
+        super().__init__()
+        self.timer = 0
+        self.next_state = 'game_play'
+ 
+    def draw(self, surface):
+        surface.fill((0, 0, 0))
+        draw_text(surface, font_lg, f'(level {game_levels[0].number})', (255, 255, 255), GAME_WIDTH//2, GAME_HEIGHT//2)
 
 vertical_input = {(0, -1): "down", (0, 1): "up"}
 horizontal_input = {(-1, 0): "left", (1, 0): "right"}
@@ -59,7 +70,7 @@ class MainMenu(Menu):
     def __init__(self, input_dict):
         super().__init__(input_dict)
         self.button_group = ButtonGroup([
-        Button('start', lambda: self.go_to('game_play')),
+        Button('start', lambda: self.go_to('level_splash')),
         Button('upgrades', lambda: self.go_to('upgrade_menu')),
         Button('exit', self.quit_game)]
     )
@@ -212,7 +223,7 @@ class SelectionMenu(Menu):
 class UpgradeMenu(Menu):
     def __init__(self, input_dict, player_list):
         super().__init__(input_dict)
-        self.next_state = 'game_play'
+        self.next_state = 'level_splash'
         self.players = player_list
         self.tile_width = None
 
@@ -370,6 +381,9 @@ class GamePlay(State):
             if not enemies:
                 self.clear()
                 self.over = True
+        
+        if len(announcements) > 0:
+            announcements[0].update(dt)
     
     def draw(self, surface):
         surface.blit(self.level.background, (0, 0))
@@ -394,8 +408,12 @@ class GamePlay(State):
             surface.blit(player.credits_txt_surf, player.credits_txt_rect)
             surface.blit(pygame.transform.scale(player.image, (64, 64)), (i * GAME_WIDTH / len(players['all']), 0))
 
+        if len(announcements) > 0:
+            surface.blit(announcements[0].text_surf, announcements[0].text_rect)
+
 states = {
     "splash": Splash(),
+    "level_splash": LevelSplash(),
     "main_menu": MainMenu(vertical_input),
     "upgrade_menu": UpgradeMenu(vertical_input, players['all']),
     "game_play": GamePlay()

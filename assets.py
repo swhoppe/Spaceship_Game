@@ -6,9 +6,11 @@ from display import screen
 try:
     font_lg = pygame.font.SysFont('Consolas', 40)
     font_md = pygame.font.SysFont('Consolas', 30)
+    font_announce = pygame.font.SysFont('Consolas', 75, italic=True)
 except:
     font_lg = pygame.font.Font(None, 40) 
     font_md = pygame.font.Font(None, 30) 
+    font_announce = pygame.font.Font(None, 75, italic=True)
 
 # image loader
 def load_image(path, size=None):

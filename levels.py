@@ -7,17 +7,7 @@ from groups import *
 from entities import *
 from components import *
 from physics import *
-
-# enemy dataclasses and spawners
-
-class EnemyType:
-    def __init__(self, image, base_hp, weapon):
-        self.image = image
-        self.base_hp = base_hp
-        self.weapon = weapon
-
-    def spawner(self, location, speed, move_packs):
-        return Spawner(self, location, speed, copy.deepcopy(move_packs))
+from ui import *
 
 class Spawner:
     def __init__(self, enemy_type, location, speed, move_packs):
@@ -37,6 +27,15 @@ class Spawner:
             None,
             copy.copy(self.enemy_type.weapon),
             copy.deepcopy(self.move_packs))
+    
+class EnemyType:
+    def __init__(self, image, base_hp, weapon):
+        self.image = image
+        self.base_hp = base_hp
+        self.weapon = weapon
+
+    def spawner(self, location, speed, move_packs):
+        return Spawner(self, location, speed, copy.deepcopy(move_packs))
     
 basic_saucer = EnemyType(saucer_1_img, 100, None)
 mini_saucer = EnemyType(saucer_1_mini_img, 50, None)
@@ -68,8 +67,20 @@ class LevelEvent:
         self.command.execute()
         self.complete = True
 
-# waves
+def assemble_line(type, number, time):
+    
+    event_list = []
 
+    for i in range(number):
+        move_pack_list = [ZipLeftTo(GAME_WIDTH - 150, active=True), 
+                      Delay((number-i)*0.3, emits=0, active=True),
+                      MoveLeftTo(-100, activates_on=0, active=False)]
+        event = LevelEvent(time+0.3 * i, type.spawner((SPAWN_X, (i+1)*GAME_HEIGHT/(number+1)), 100, move_pack_list))
+        event_list.append(event)
+
+    return event_list
+
+# waves
 class Wave:
     def __init__(self, events, complete_condition):
         self.events = events
@@ -84,20 +95,7 @@ class Wave:
         all_events_complete = all(event.complete for event in self.events)
         return all_events_complete and self.complete_condition.check(ctx)
 
-def assemble_line(type, number, time):
-    
-    event_list = []
-
-    for i in range(number):
-        move_pack_list = [ZipLeftTo(GAME_WIDTH - 150, active=True), 
-                      Delay((number-i)*0.3, emits=0, active=True),
-                      MoveLeftTo(-100, activates_on=0, active=False)]
-        event = LevelEvent(time+0.3 * i, type.spawner((SPAWN_X, (i+1)*GAME_HEIGHT/(number+1)), 100, move_pack_list))
-        event_list.append(event)
-
-    return event_list
-
-wave_1_1 = Wave(assemble_line(basic_saucer, 5, 0),
+wave_1_1 = Wave(assemble_line(basic_saucer, 5, 3),
     complete_condition=AllEnemiesCleared())
 
 wave_1_2 = Wave([
@@ -107,20 +105,21 @@ wave_1_2 = Wave([
     complete_condition=AllEnemiesCleared())
 
 wave_1_3 = Wave([
-    LevelEvent(2, shooting_saucer.spawner((SPAWN_X, MID_HT), 300, up_down_dodge))]
+    LevelEvent(3, shooting_saucer.spawner((SPAWN_X, MID_HT), 300, up_down_dodge))]
     + assemble_line(basic_saucer, 6, 5)
-    +[LevelEvent(4, mini_saucer.spawner((SPAWN_X, MID_HT//2), 300, [MoveLeftTo(MID_WD)])),
-    LevelEvent(5, mini_saucer.spawner((SPAWN_X, 3*MID_HT//2), 300, [MoveLeftTo(MID_WD)]))],
+    +[LevelEvent(6, mini_saucer.spawner((SPAWN_X, MID_HT//2), 300, [MoveLeftTo(MID_WD)])),
+    LevelEvent(7, mini_saucer.spawner((SPAWN_X, 3*MID_HT//2), 300, [MoveLeftTo(MID_WD)]))],
     complete_condition=AllEnemiesCleared())
 
 # levels
 
 class Level:
-    def __init__(self, waves, background):
+    def __init__(self, number, waves, background):
+        self.number = number
         self.waves = waves
         self.background = background
 
-game_levels = [Level([wave_1_1, wave_1_2, wave_1_3], nebula_1_img)]
+game_levels = [Level(1, [wave_1_1, wave_1_2, wave_1_3], nebula_1_img)]
 
 # wave sequencer
 
@@ -131,6 +130,7 @@ class WaveSequencer:
         self.wave_timer = 0
         self.complete = False
         self.failed = False
+        self.wave_delay_timer = 0
 
     def load(self, level):
         self.waves = level.waves
@@ -138,6 +138,8 @@ class WaveSequencer:
         self.wave_timer = 0
         self.complete = False
         self.failed = False
+
+        make_announcement(f"Wave {self.current_index+1}")
     
     @property
     def current_wave(self):
@@ -151,11 +153,16 @@ class WaveSequencer:
         self.wave_timer += dt
 
         if self.current_wave.is_complete(self):
+            self.wave_delay_timer += dt
+        
+        if self.wave_delay_timer >= 2:
             self.advance()
+            self.wave_delay_timer = 0
     
     def advance(self):
         self.current_index += 1
         self.wave_timer = 0
+        make_announcement(f"Wave {self.current_index+1}")
         if self.current_index >= len(self.waves):
             self.complete = True
     

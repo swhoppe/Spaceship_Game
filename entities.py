@@ -369,6 +369,7 @@ class LightningProjectile(Projectile):
         self.anim_frame = 0
         self.anim_timer = 0
         self.frame_duration = 0.08
+        self.velocity = np.zeros(2)
 
     def update(self, boundary, dt):
         self.duration -= dt

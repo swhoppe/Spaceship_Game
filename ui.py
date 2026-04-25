@@ -1,5 +1,7 @@
 from assets import *
 from utils import *
+from groups import announcements
+from assets import *
 
 class Button:
     def __init__(self, text, action):
@@ -47,3 +49,41 @@ class ButtonGroup:
             else:
                 color = self.colors['deselected']
             button.draw(surface, center_x, y_pos, color)
+
+class BannerAnnouncement:
+    def __init__(self, text):
+        self.text = text
+        self.text_surf = font_announce.render(f"{self.text}", True, (0, 255, 0))
+        self.text_rect = self.text_surf.get_rect()
+        self.x = float(GAME_WIDTH)
+        self.text_rect.centery = GAME_HEIGHT // 2
+        self.phase = 'in'
+        self.hold = 1
+        self.hold_timer = 0
+        self.tof = 0
+
+        announcements.append(self)
+
+    def update(self, dt):
+        target = GAME_WIDTH//2 - self.text_rect.width//2
+
+        if self.phase == 'in':
+            self.x -= (self.x - target) * (0.15**(dt*60))
+            if abs(target - self.x) < 1:
+                self.phase = 'hold'
+        
+        if self.phase == 'hold':
+            self.hold_timer += dt
+            self.x -= dt*10
+            if self.hold_timer >= self.hold:
+                self.phase = 'out'
+        
+        if self.phase == 'out':
+            self.x -= 1000000*dt / (self.x + self.text_rect.width)
+            if self.x < -self.text_rect.width:
+                announcements.remove(self)
+                       
+        self.text_rect.left = int(self.x)
+
+def make_announcement(text):
+    BannerAnnouncement(text)

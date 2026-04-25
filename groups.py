@@ -6,3 +6,4 @@ players = {'all': all_players, 'active' : active_players}
 enemies = pygame.sprite.Group()
 projectiles = pygame.sprite.Group()
 effects = pygame.sprite.Group()
+announcements = []
